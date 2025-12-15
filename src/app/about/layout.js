@@ -1,6 +1,6 @@
 import ChurchLayout from '@/app/layout/ChurchLayout';
 
-export default function AboutLayout({ children }) {
+export default function DepartmentsLayout({ children }) {
   return (
     <ChurchLayout 
     >

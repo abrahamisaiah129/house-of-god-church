@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import Image from "next/image";
 import ChurchHero from "@/components/ChurchHero";
 
@@ -47,7 +47,7 @@ The Publications Department was formed in 1998 and its duty was primarily to tra
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

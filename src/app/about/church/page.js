@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -312,7 +312,7 @@ export default function AboutChurchPage() {
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

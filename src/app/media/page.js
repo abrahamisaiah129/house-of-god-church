@@ -9,7 +9,7 @@ import Header from "@/components/Navigation";
 export default function MediaPage() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {/* takes the file selected ad renders it ( as a returned component) */}
       <Tabs
         Video={<VideoPage />}
@@ -17,7 +17,7 @@ export default function MediaPage() {
         Gallery={<GalleryPage />}
       />
 
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

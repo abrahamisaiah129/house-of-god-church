@@ -32,7 +32,7 @@ export default function HeroSection() {
     }, 5000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [slides.length]);
 
   return (
     <div className="hero-section mt-5 pt-3">

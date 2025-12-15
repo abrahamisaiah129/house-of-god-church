@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import Image from "next/image";
 import ChurchHero from "@/components/ChurchHero";
 
@@ -61,7 +61,7 @@ The administrative Head of Department is Miss Ogorchukwu Ogweh. She joined The H
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

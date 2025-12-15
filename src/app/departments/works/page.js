@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import Image from "next/image";
 import ChurchHero from "@/components/ChurchHero";
 
@@ -54,7 +54,7 @@ Approximately, we have sixty (60) members and our meeting day is every Saturday 
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

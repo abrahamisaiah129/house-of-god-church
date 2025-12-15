@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import Image from "next/image";
 import ChurchHero from "@/components/ChurchHero";
 
@@ -50,7 +50,7 @@ The singles fellowship is a department within the Household of God structure and
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

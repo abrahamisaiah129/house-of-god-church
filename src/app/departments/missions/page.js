@@ -1,6 +1,6 @@
 "use client";
 
-import BaseFooter from "@/components/BaseFooter";
+// import BaseFooter from "@/components/BaseFooter";
 import Image from "next/image";
 import ChurchHero from "@/components/ChurchHero";
 
@@ -50,7 +50,7 @@ The Missions department meets every Saturday of each month with the exception of
           </div>
         </div>
       </div>
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }

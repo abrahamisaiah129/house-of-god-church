@@ -12,8 +12,13 @@ export default function Programmes() {
       <div className="row g-4 justify-content-center">
         {programmes.map((programme, index) => (
           <div key={index} className="col-md-3 col-sm-6">
-            <div className="programme-card" style={{ backgroundColor: programme.color }}>
-              <div className="programme-icon"><i className="fas fa-calendar-alt"></i></div>
+            <div
+              className="programme-card text-white"
+              style={{ backgroundColor: programme.color }}
+            >
+              <div className="programme-icon">
+                <i className="fas fa-calendar-alt"></i>
+              </div>
               <div className="programme-date">{programme.date}</div>
               <div className="programme-month">{programme.month}</div>
               <div className="programme-title">{programme.title}</div>

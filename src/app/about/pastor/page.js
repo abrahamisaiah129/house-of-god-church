@@ -1,6 +1,6 @@
 'use client';
 
-import BaseFooter from '@/components/BaseFooter';
+// import BaseFooter from '@/components/BaseFooter';
 import Image from 'next/image';
 import ChurchHero from "@/components/ChurchHero";
 import { useState } from "react";
@@ -184,7 +184,7 @@ export default function AboutPastorPage() {
         </section>
       </div>
 
-      <BaseFooter />
+      {/* <BaseFooter /> */}
     </>
   );
 }
