@@ -7,9 +7,9 @@ export default function Footer() {
       <div className="container">
         <div className="row align-items-center mb-4">
           <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-            <Image 
-              src="/assets/images/hog-logo.png" 
-              alt="Household of God Church Logo" 
+            <Image
+              src="/assets/images/hog-logo.png"
+              alt="Household of God Church Logo"
               width={120}
               height={60}
               className="d-inline-block"
@@ -23,21 +23,26 @@ export default function Footer() {
               <input
                 type="email"
                 className="form-control border-0"
-                placeholder="youremailaddress@gmail.com" 
+                placeholder="youremailaddress@gmail.com"
               />
-              <button className="btn btn-subscribe rounded-end bg-secondary" type="submit">
+              <button
+                className="btn btn-subscribe rounded-end bg-secondary"
+                type="submit"
+              >
                 Subscribe
               </button>
             </form>
           </div>
         </div>
-        <hr style={{ color: '#ffffff' }} />
+        <hr style={{ color: "#ffffff" }} />
         <div className="row text-start mt-4">
           <div className="col-md-3 mb-4">
             <h6 className="fw-bold">ADDRESS</h6>
             <p>
-              Plot 4 HouseHold of God Street,<br />
-              Off Kudirat Abiola Way, Clay Bus-Stop,<br />
+              Plot 4 HouseHold of God Street,
+              <br />
+              Off Kudirat Abiola Way, Clay Bus-Stop,
+              <br />
               Ikeja, Lagos - Nigeria
             </p>
           </div>
@@ -52,50 +57,60 @@ export default function Footer() {
             <h6 className="fw-bold">FOLLOW US</h6>
             <p>Follow us on our social Media</p>
             <div className="social-icons">
-              <a href="#" className="text-white me-3"><i className="fab fa-youtube"></i></a>
-              <a href="#" className="text-white me-3"><i className="fab fa-facebook"></i></a>
-              <a href="#" className="text-white me-3"><i className="fab fa-twitter"></i></a>
+              <a href="#" className="text-white me-3">
+                <i className="fab fa-youtube"></i>
+              </a>
+              <a href="#" className="text-white me-3">
+                <i className="fab fa-facebook"></i>
+              </a>
+              <a href="#" className="text-white me-3">
+                <i className="fab fa-twitter"></i>
+              </a>
             </div>
           </div>
           <div className="col-md-3 mb-4">
             <h6 className="fw-bold">INFO</h6>
             <div className="info-item mb-3">
-              <Image 
-                src="/assets/images/footer-hh-logo.png" 
-                alt="Prayer" 
+              <Image
+                src="/assets/images/footer-hh-logo.png"
+                alt="Prayer"
                 width={40}
                 height={40}
                 className="me-2"
               />
               <div>
                 <div>Prayer Meeting</div>
-                <small>6pm - 7pm Weekdays</small>
+                <small>8:00 AM - 9:00 AM Sundays</small>
               </div>
             </div>
             <div className="info-item mb-3">
-              <Image 
-                src="/assets/images/footer-hh-logo.png" 
-                alt="Proclaimers" 
+              <Image
+                src="/assets/images/footer-hh-logo.png"
+                alt="Proclaimers"
                 width={40}
                 height={40}
                 className="me-2"
               />
               <div>
                 <div>Proclaimers</div>
-                <small>9pm Saturdays</small>
+                <small>9:00 AM Saturdays</small>
               </div>
             </div>
             <div className="info-item">
-              <Image 
-                src="/assets/images/ca1.png" 
-                alt="Apokalupsis" 
+              <Image
+                src="/assets/images/ca1.png"
+                alt="Apokalupsis"
                 width={40}
                 height={40}
                 className="me-2"
               />
               <div>
                 <div>Apokalupsis</div>
-                <small>7am Sundays on Raypower 100.5fm</small>
+                <small>7:00 AM Sundays on Raypower 100.5fm</small>
+                <br />
+                <small>
+                  7:00 AM - 7:30 AM Sundays on Household of God WebMedia
+                </small>
               </div>
             </div>
           </div>

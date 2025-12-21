@@ -28,7 +28,7 @@ export default function AboutChurchPage() {
       welcomeText: "Join Our",
       title: "COMMUNITY",
       subtitle: "Find your place in our growing family of believers.",
-      serviceTime: "Friday Prayer: 6 PM",
+      serviceTime: "Sunday Prayer Meeting: 8:00 AM - 9:00 AM",
     },
   ];
 
@@ -38,7 +38,7 @@ export default function AboutChurchPage() {
     }, 5000);
 
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -306,7 +306,8 @@ export default function AboutChurchPage() {
               </li>
               <li className="flex items-center">
                 <i className="far fa-clock text-yellow-500 mr-2"></i>
-                <strong className="mr-1">Friday Prayer Meeting:</strong> 6:00 PM
+                <strong className="mr-1">Sunday Prayer Meeting:</strong> 8:00 AM
+                - 9:00 AM
               </li>
             </ul>
           </div>

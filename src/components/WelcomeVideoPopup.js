@@ -25,7 +25,7 @@ export default function WelcomeVideoPopup() {
     seconds: 0,
   });
   const [isServiceTime, setIsServiceTime] = useState(false);
-// worked on this today
+
   useEffect(() => {
     if (!isOpen) return;
 
