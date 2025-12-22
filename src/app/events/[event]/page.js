@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Image from "next/image";
 
@@ -8,6 +8,8 @@ import Image from "next/image";
 import FilterDropdown from "./components/FilterDropdown";
 import GalleryGrid from "./components/GalleryGrid"; // Matches GalleryGrid.js
 import LightboxModal from "./components/Lightboxmodal"; // Matches LightboxModal.js
+import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
+import ScrollToTop from "@/components/ScrollToTop";
 
 // ====================== EVENT DATA ======================
 const eventData = {
@@ -55,6 +57,7 @@ const eventData = {
         month: "December",
         date: "25 December 2025",
         gallery: Array(20).fill("/assets/images/church-background.png"),
+        sermon: "https://www.youtube.com/embed/M7lc1UVf-VE",
       },
     ],
   },
@@ -109,6 +112,7 @@ const eventData = {
         month: "april",
         date: "20 April 2024",
         gallery: Array(16).fill("/assets/images/book.png"),
+        sermon: "https://www.youtube.com/embed/M7lc1UVf-VE",
       },
     ],
   },
@@ -398,11 +402,15 @@ const Pagination = ({ current, total, onChange }) => {
   const pages = Array.from({ length: total }, (_, i) => i + 1);
 
   return (
-    <div className="pagination mt-5 justify-content-center">
+    <div className="flex justify-center items-center gap-2 mt-12">
       <button
-        className={current === 1 ? "disabled" : ""}
         onClick={() => current > 1 && onChange(current - 1)}
         disabled={current === 1}
+        className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${
+          current === 1
+            ? "border-gray-200 text-gray-300 cursor-not-allowed"
+            : "border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+        }`}
       >
         <i className="fas fa-chevron-left"></i>
       </button>
@@ -410,17 +418,25 @@ const Pagination = ({ current, total, onChange }) => {
       {pages.map((p) => (
         <button
           key={p}
-          className={p === current ? "active" : ""}
           onClick={() => onChange(p)}
+          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
+            p === current
+              ? "bg-yellow-500 text-black shadow-lg scale-110"
+              : "text-gray-500 hover:text-yellow-500 hover:bg-gray-50"
+          }`}
         >
           {p}
         </button>
       ))}
 
       <button
-        className={current === total ? "disabled" : ""}
         onClick={() => current < total && onChange(current + 1)}
         disabled={current === total}
+        className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${
+          current === total
+            ? "border-gray-200 text-gray-300 cursor-not-allowed"
+            : "border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+        }`}
       >
         <i className="fas fa-chevron-right"></i>
       </button>
@@ -443,6 +459,15 @@ export default function EventPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [sermonView, setSermonView] = useState("hidden"); // 'hidden', 'modal', 'minimized'
+  const hasAutoShown = useRef(false);
+
+  useEffect(() => {
+    if (currentEntry?.sermon && !hasAutoShown.current) {
+      setSermonView("modal");
+      hasAutoShown.current = true;
+    }
+  }, [currentEntry]);
 
   const imagesPerPage = 8;
 
@@ -479,14 +504,16 @@ export default function EventPage() {
 
   const currentEntry = useMemo(() => {
     if (!config) return null;
+    // Sort entries by year descending to show the latest by default
+    const sortedEntries = [...config.entries].sort((a, b) => b.year - a.year);
     return (
-      config.entries.find((e) => {
+      sortedEntries.find((e) => {
         const monthMatch =
           !selectedMonth ||
           e.month?.toLowerCase() === selectedMonth.toLowerCase();
         const yearMatch = !selectedYear || e.year === Number(selectedYear);
         return monthMatch && yearMatch;
-      }) || config.entries[0]
+      }) || sortedEntries[0]
     );
   }, [config, selectedMonth, selectedYear]);
 
@@ -517,6 +544,15 @@ export default function EventPage() {
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-warning">{config.title}</h1>
           <p className="text-2xl mt-3 text-black">{config.slogan}</p>
+          {currentEntry?.sermon && (
+            <button
+              onClick={() => setSermonView("modal")}
+              className="mt-6 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 inline-flex items-center gap-2 animate-pulse"
+            >
+              <i className="fas fa-play-circle text-xl"></i>
+              <span>Watch Live</span>
+            </button>
+          )}
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mb-12">
@@ -566,13 +602,7 @@ export default function EventPage() {
                   <strong>Date:</strong> {currentEntry.date}
                 </p>
               )}
-              <div className="text-justify leading-7 text-gray-800">
-                {config.description.split("\n").map((p, i) => (
-                  <p key={i} className="mb-4">
-                    {p}
-                  </p>
-                ))}
-              </div>
+              <p className="text-lg">{config.description}</p>
             </div>
           </div>
         </div>
@@ -610,6 +640,72 @@ export default function EventPage() {
           onNext={() => setLightboxIndex((i) => (i + 1) % gallery.length)}
         />
       )}
+
+      {/* Persistent Sermon Player Modal */}
+      {currentEntry?.sermon && sermonView !== "hidden" && (
+        <>
+          <div
+            className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm transition-all duration-300 ${
+              sermonView === "modal"
+                ? "opacity-100 visible"
+                : "opacity-0 invisible pointer-events-none"
+            }`}
+          >
+            <div className="relative w-full max-w-5xl mx-4 bg-black rounded-xl overflow-hidden shadow-2xl border border-gray-800">
+              <div className="flex justify-between items-center p-4 bg-gray-900 border-b border-gray-800">
+                <h3 className="text-white font-semibold text-lg">
+                  Watching: {config.title}
+                </h3>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSermonView("minimized")}
+                    className="text-gray-400 hover:text-yellow-500 transition-colors"
+                    title="Minimize"
+                  >
+                    <i className="fas fa-minus"></i>
+                  </button>
+                  <button
+                    onClick={() => setSermonView("hidden")}
+                    className="text-gray-400 hover:text-red-500 transition-colors"
+                    title="Close"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="aspect-video w-full bg-black">
+                <iframe
+                  src={currentEntry.sermon}
+                  title="Sermon Video"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+
+          {sermonView === "minimized" && (
+            <button
+              onClick={() => setSermonView("modal")}
+              className="fixed bottom-24 right-8 z-[100] w-16 h-16 bg-yellow-500 rounded-full shadow-2xl flex items-center justify-center text-black hover:scale-110 transition-transform animate-bounce border-4 border-white"
+              title="Resume Watching"
+            >
+              <i className="fas fa-play text-2xl"></i>
+            </button>
+          )}
+        </>
+      )}
+
+      {/* Global Video Popup (Floating Button for Navigation) */}
+      <WelcomeVideoPopup
+        initialOpen={true}
+        initialMinimized={true}
+        autoOpen={false}
+      />
+
+      {/* Scroll To Top Button */}
+      <ScrollToTop />
     </>
   );
 }

@@ -7,7 +7,8 @@ export default function BookSection() {
         <div className="row">
           {/* Left Column */}
           <div className="col-md-6 mb-md-0">
-            <h3 className="highlight-title">THE LAST OUTCAST</h3>
+            <h3 className="highlight-title text-warning mb-2">THE LAST OUTCAST</h3>
+            <div className="w-24 h-1 bg-yellow-500 mb-4 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
             <p>
               Who is the Last Outcast?
               <br />
@@ -21,7 +22,7 @@ export default function BookSection() {
               <br />
               <br />
               Discover the answers in the prophetic novel
-              <span className="fw-bold"> THE LAST OUTCAST</span>.
+              <span className="fw-bold text-warning"> THE LAST OUTCAST</span>.
             </p>
 
             <Image
@@ -36,15 +37,12 @@ export default function BookSection() {
           {/* Right Column */}
           <div className="col-md-6">
             <div className="row mb-2">
-              <div className="col-md-4">
-                <hr />
-              </div>
-              <div className="right-border-title col-md-4">
+              <div className="col-md-4 text-warning ">{/* <hr /> */}</div>
+              <div className="right-border-title col-md-4 fs-3 text-warning text-center">
                 Huperballó Megethos
+                <div className="w-24 h-1 bg-yellow-500 mx-auto mt-2 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
               </div>
-              <div className="col-md-4">
-                <hr />
-              </div>
+              <div className="col-md-4   text-warning">{/* <hr /> */}</div>
             </div>
 
             <div className="row align-items-start">
@@ -54,16 +52,18 @@ export default function BookSection() {
                   alt="Rev. Chris Okotie"
                   width={200}
                   height={250}
-                  className="profile-img mb-3"
+                  className="profile-img mb-3 border rounded"
                 />
-                <div className="author-info">Rev. Chris Okotie</div>
-                <div className="author-subtitle">
+                <div className="author-info  fw-semibold">
+                  Rev. Chris Okotie
+                </div>
+                <div className="author-subtitle  fw-semibold">
                   Pastor, Household of God Church
                 </div>
               </div>
 
               <div className="col-sm-7">
-                <p>
+                <p className="italic">
                   “And what is the exceeding greatness of His power to us who
                   believe, according to the working of His mighty power, which
                   He wrought in Christ, when He raised Him from the dead and set
@@ -73,7 +73,7 @@ export default function BookSection() {
                   <br />
                   This profound revelation of divine authority and spiritual
                   dominion forms the foundation of the message woven throughout
-                  <span className="fw-bold"> THE LAST OUTCAST</span>.
+            ARRA      <span className="fw-bold"> THE LAST OUTCAST</span>.
                 </p>
 
                 <button className="btn btn-seemore">See More</button>

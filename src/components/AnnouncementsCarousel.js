@@ -23,7 +23,7 @@ const DEFAULT_ITEMS = [
     link: "/departments/children",
   },
   {
-    image: " /assets/images/Rectangle 4.png'",
+    image: "/assets/images/Rectangle 4.png",
     title: "Youth Fellowship — Friday 7:30 PM",
     text: "A vibrant community for young people to connect, worship, and discuss life's challenges from a biblical perspective.",
     link: "/events",
@@ -38,8 +38,8 @@ const DEFAULT_ITEMS = [
 
 export default function AnnouncementsCarousel({
   items = DEFAULT_ITEMS,
-  interval = 3500,
-  className = "mt-20 mb-12",
+  interval = 5000,
+  className = "my-16",
 }) {
   const [index, setIndex] = useState(0);
   const [lightboxItem, setLightboxItem] = useState(null);
@@ -66,78 +66,102 @@ export default function AnnouncementsCarousel({
 
   return (
     <div
-      className={`w-full relative ${className}`}
+      className={`w-full relative ${className} py-12 bg-black border-y border-yellow-500/10 text-white`}
       onMouseEnter={() => (pausedRef.current = true)}
       onMouseLeave={() => (pausedRef.current = false)}
       onFocus={() => (pausedRef.current = true)}
       onBlur={() => (pausedRef.current = false)}
     >
-      <div className="relative h-80 md:h-64 overflow-hidden">
-        {items.map((item, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ease-in-out px-12 md:px-16 ${
-              i === index ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
-            aria-hidden={i === index ? "false" : "true"}
-          >
-            {typeof item === "string" ? (
-              <span className="text-yellow-400 font-bold text-xl text-center px-4">
-                {item}
-              </span>
-            ) : (
-              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full h-full max-w-4xl">
-                {item.image && (
-                  <div className="relative w-full md:w-1/3 h-24 md:h-full">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover rounded-lg"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-                )}
-                <div className="flex flex-col justify-center w-full md:w-2/3 h-auto md:h-full text-center md:text-left">
-                  <h3 className="text-yellow-400 font-bold text-lg md:text-xl mb-1 md:mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-white text-sm md:text-base line-clamp-5 md:line-clamp-4">
-                    {item.text}
-                  </p>
-                  {(item.text || item.link) && (
-                    <button
-                      onClick={() => setLightboxItem(item)}
-                      className="mt-2 inline-block bg-yellow-500 hover:bg-yellow-600 text-black text-xs md:text-sm font-bold py-1 px-3 rounded transition-colors"
-                    >
-                      Read More
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="text-center mb-10">
+          {/* <span className="text-yellow-500 text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
+            Stay Connected
+          </span> */}
+          <h2 className="text-3xl md:text-4xl font-bold text-white mt-2">
+          ANNOUNCEMENTS
+          </h2>
+          <div className="w-24 h-1 bg-yellow-500 mx-auto mt-4 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
+        </div>
 
-      {items.length > 1 && (
-        <>
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors z-10"
-            aria-label="Previous slide"
-          >
-            <i className="fas fa-chevron-left text-lg"></i>
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors z-10"
-            aria-label="Next slide"
-          >
-            <i className="fas fa-chevron-right text-lg"></i>
-          </button>
-        </>
-      )}
+        <div className="relative h-[60vh] md:h-[80vh] w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+          {items.map((item, i) => (
+            <div
+              key={i}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out bg-black bg-cover bg-center ${
+                i === index ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              style={{
+                backgroundImage:
+                  typeof item !== "string" && item.image
+                    ? `url('${item.image}')`
+                    : "none",
+              }}
+              aria-hidden={i === index ? "false" : "true"}
+            >
+              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center p-8">
+                {typeof item === "string" ? (
+                  <span className="text-yellow-400 font-bold text-3xl md:text-4xl leading-relaxed max-w-3xl">
+                    {item}
+                  </span>
+                ) : (
+                  <>
+                    <h3 className="text-yellow-400 font-bold text-3xl md:text-4xl leading-tight mb-4">
+                      {item.title}
+                    </h3>
+                    <p className="text-white text-lg md:text-xl leading-relaxed max-w-3xl mb-6 line-clamp-3 drop-shadow-md">
+                      {item.text}
+                    </p>
+                    {(item.text || item.link) && (
+                      <button
+                        onClick={() => setLightboxItem(item)}
+                        className="bg-white hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                      >
+                        Read More
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* Navigation Buttons */}
+          {items.length > 1 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-yellow-500 hover:text-black text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/10 z-20"
+                aria-label="Previous slide"
+              >
+                <i className="fas fa-chevron-left text-lg"></i>
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-yellow-500 hover:text-black text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/10 z-20"
+                aria-label="Next slide"
+              >
+                <i className="fas fa-chevron-right text-lg"></i>
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Indicators */}
+        <div className="flex justify-center gap-2 mt-8">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === index
+                  ? "w-8 bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]"
+                  : "w-2 bg-gray-700 hover:bg-gray-600"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
 
       {/* Lightbox Modal */}
       {lightboxItem && (
@@ -174,7 +198,7 @@ export default function AnnouncementsCarousel({
               <h3 className="text-2xl font-bold text-yellow-400 mb-4">
                 {lightboxItem.title}
               </h3>
-              <p className="text-gray-300 text-base leading-relaxed whitespace-pre-wrap">
+              <p className="text-white text-base leading-relaxed whitespace-pre-wrap">
                 {lightboxItem.text}
               </p>
               {lightboxItem.link && (

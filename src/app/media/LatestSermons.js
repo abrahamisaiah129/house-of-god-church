@@ -24,6 +24,7 @@ export default function LatestSermons() {
           <h2 className="section-title text-warning fw-bold mb-2">
             Latest Sermons
           </h2>
+          <div className="w-24 h-1 bg-yellow-500 mx-auto mt-3 mb-3 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
           <p className="lead text-secondary fw-light">
             Watch our most recent services and messages.
           </p>

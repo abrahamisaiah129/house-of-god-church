@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import ChurchLayout from "@/app/layout/ChurchLayout";
 import ChurchHero from "@/components/ChurchHero";
 import AboutChurch from "@/components/AboutChurch";
@@ -11,11 +12,14 @@ import AnnouncementsCarousel from "@/components/AnnouncementsCarousel";
 
 // This file must be in src/components/WelcomeVideoPopup.js
 import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
+  const [watchLiveTrigger, setWatchLiveTrigger] = useState(null);
+
   return (
     <ChurchLayout>
-      <ChurchHero />
+      <ChurchHero onWatchLive={() => setWatchLiveTrigger(Date.now())} />
       <AboutChurch />
       <WatchSermons />
       {/* Announcements carousel — placed near Programmes */}
@@ -26,7 +30,8 @@ export default function Home() {
       <ContactSection />
 
       {/* This popup appears ONLY on Sundays, once per day */}
-      <WelcomeVideoPopup />
+      <WelcomeVideoPopup openTrigger={watchLiveTrigger} />
+      <ScrollToTop />
     </ChurchLayout>
   );
 }

@@ -24,55 +24,75 @@ export default function ContactSection() {
   return (
     <div className="contact-section py-5" id="contact-section">
       <div className="container">
-        <div className="row g-5 align-items-stretch">
+        <div className="row g-4 align-items-stretch">
           {/* LEFT COLUMN */}
-          <div className="col-lg-6 d-flex flex-column">
-            <h3 className="fw-bold text-warning mb-3">SEND US A MESSAGE</h3>
+          <div className="col-lg-6 d-flex">
+            <div className="bg-black p-5 rounded-4 shadow-lg w-100 d-flex flex-column justify-content-center h-100 border border-gray-800">
+              <h3 className="fw-bold text-warning mb-2">SEND US A MESSAGE</h3>
+              <div className="w-24 h-1 bg-yellow-500 mb-4 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
 
-            <p
-              className="text-gray-600 mb-4 text-lg"
-              style={{ fontWeight: 500 }}
-            >
-              Questions, comments, or suggestions? Simply fill in the form and
-              we&apos;ll be in touch shortly.
-            </p>
+              <p
+                className="text-gray-300 mb-4 text-lg"
+                style={{ fontWeight: 500 }}
+              >
+                Questions, comments, or suggestions? Simply fill in the form and
+                we&apos;ll be in touch shortly.
+              </p>
 
-            {/* EVENLY SPACED INFO */}
-            <div className="d-flex flex-column gap-4">
-              <div className="d-flex align-items-start gap-3">
-                <i className="fas fa-location-dot text-warning text-xl mt-1"></i>
-                <span className="text-gray-800 text-lg font-medium">
-                  Plot 4 Household of God Street, Off Kudirat Abiola Way, <br />
-                  Clay Bus–Stop, Ikeja, Lagos – Nigeria
-                </span>
-              </div>
+              {/* EVENLY SPACED INFO */}
+              <div className="d-flex flex-column gap-4">
+                <div className="d-flex align-items-start gap-3">
+                  <div
+                    className="mt-1 bg-gray-900 p-2 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{ width: "40px", height: "40px" }}
+                  >
+                    <i className="fas fa-location-dot text-warning text-lg"></i>
+                  </div>
+                  <span className="text-gray-200 text-lg font-medium">
+                    Plot 4 Household of God Street, Off Kudirat Abiola Way,{" "}
+                    <br />
+                    Clay Bus–Stop, Ikeja, Lagos – Nigeria
+                  </span>
+                </div>
 
-              <div className="d-flex align-items-center gap-3">
-                <i className="fas fa-envelope text-warning text-xl"></i>
-                <span className="text-gray-800 text-lg font-medium">
-                  info@householdofgodchurch.org
-                </span>
-              </div>
+                <div className="d-flex align-items-center gap-3">
+                  <div
+                    className="bg-gray-900 p-2 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{ width: "40px", height: "40px" }}
+                  >
+                    <i className="fas fa-envelope text-warning text-lg"></i>
+                  </div>
+                  <span className="text-gray-200 text-lg font-medium">
+                    info@householdofgodchurch.org
+                  </span>
+                </div>
 
-              <div className="d-flex align-items-start gap-3">
-                <i className="fas fa-phone text-warning text-xl mt-1"></i>
-                <span className="text-gray-800 text-lg font-medium">
-                  +234 813 6633 494 <br />
-                  +234 702 6828 318
-                </span>
+                <div className="d-flex align-items-start gap-3">
+                  <div
+                    className="mt-1 bg-gray-900 p-2 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{ width: "40px", height: "40px" }}
+                  >
+                    <i className="fas fa-phone text-warning text-lg"></i>
+                  </div>
+                  <span className="text-gray-200 text-lg font-medium">
+                    +234 813 6633 494 <br />
+                    +234 702 6828 318
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
           <div className="col-lg-6 d-flex">
-            <div className="bg-white p-5 rounded-4 shadow-lg border border-light w-100 d-flex flex-column">
+            <div className="bg-white p-5 rounded-4 shadow-lg border border-light w-100 d-flex flex-column justify-content-center h-100">
               <form
                 onSubmit={handleSubmit}
                 className="d-flex flex-column gap-4 h-100"
               >
                 <div>
-                  <h3 className="fw-bold text-warning mb-1">CONTACT FORM</h3>
+                  <h3 className="fw-bold text-warning mb-2">CONTACT FORM</h3>
+                  <div className="w-24 h-1 bg-yellow-500 mb-2 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
                   <p className="text-muted small">
                     Kindly fill the form below to reach out to us
                   </p>

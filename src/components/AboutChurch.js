@@ -65,7 +65,8 @@ export default function AboutChurch() {
         {/* TEXT SECTION - 60% Width on Large Screens */}
         <div className="bg-white col-md-6 border-l-4 border-[#ffd700] shadow-lg rounded-2xl p-8 md:p-10 leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
           <div className="d-flex flex-column justify-content-center w-100">
-            <h2 className="church-title">A CHURCH WHERE GRACE MEETS GLORY</h2>
+            <h2 className="church-title mb-2">A CHURCH WHERE GRACE MEETS GLORY</h2>
+            <div className="w-24 h-1 bg-yellow-500 mb-4 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
             <p className="church-text">
               The young ministry had its inaugural Sunday morning service on the
               1st of February, 1987 in his living room, then in the Ikeja area
