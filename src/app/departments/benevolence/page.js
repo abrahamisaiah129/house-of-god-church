@@ -19,7 +19,7 @@ export default function BenevolencePage() {
             <div className="flex flex-col items-center text-center sm:col-span-2">
               <h2 className="text-2xl font-semibold mb-6">Meet Our Head of Department</h2>
 
-              <div className="w-full aspect-[4/5] relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.04]">
+              <div className="w-full aspect-4/5 relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.04]">
                 <Image src="/assets/images/benevolence-head.jpg" alt="Head of Department" fill className="object-cover object-center" priority />
               </div>
 
@@ -29,7 +29,7 @@ export default function BenevolencePage() {
                The administrative Head of Department is Bro Mike Igbokwe.
               </p>
 
-              <a href="mailto:benevolence@householdofgodchurch.org" className="!text-[#ffd700] mt-3 font-medium !no-underline">
+              <a href="mailto:benevolence@householdofgodchurch.org" className="text-[#ffd700]! mt-3 font-medium no-underline!">
                 <i className="fas fa-envelope me-2"></i> benevolence@householdofgodchurch.org
               </a>
             </div>

@@ -1,38 +1,352 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useParams } from 'next/navigation';
+import Image from 'next/image';
+
+// Unified Data Schema
+const mediaData = [
+  // Events
+  {
+    id: "grace",
+    category: "Grace",
+    title: "Grace Programme Gallery",
+    description: "Extending Care to the Less Privileged through charitable support.",
+    images: ["/assets/images/ca1.png", "/assets/images/ca3.png"],
+    audioUrl: "Grace 2023 Sermon",
+    videoUrl: "Grace 2023 Highlights"
+  },
+  {
+    id: "queen-esther",
+    category: "Queen Esther",
+    title: "Queen Esther Gallery",
+    description: "Celebrating Biblical Womanhood and empowering women.",
+    images: ["/assets/images/book.png"],
+    audioUrl: "Queen Esther 2024 Message",
+    videoUrl: "Queen Esther 2024 Crowning"
+  },
+  {
+    id: "apokalupsis",
+    category: "Apokalupsis",
+    title: "Apokalupsis Gallery",
+    description: "Spreading God's Grace through television ministry.",
+    images: ["/assets/images/ca3.png"],
+    audioUrl: "Apokalupsis Audio Message",
+    videoUrl: "/assets/videos/appokalupsis.mp4"
+  },
+  {
+    id: "karis-award",
+    category: "Karis Award",
+    title: "Karis Award Gallery",
+    description: "Honoring Unsung Heroes in the Nigerian society.",
+    images: ["/assets/images/Rectangle 4.png"],
+    audioUrl: "Karis Award Speech",
+    videoUrl: "Karis Award Presentation"
+  },
+  // Departments
+  {
+    id: "children",
+    category: "Children's Department",
+    title: "Children's Department Gallery",
+    description: "Raising Godly Children in the way of the Lord.",
+    images: ["/assets/images/children-church-head.jpg"],
+    audioUrl: "Children's Day Special",
+    videoUrl: "Children's Presentation"
+  },
+  {
+    id: "benevolence",
+    category: "Benevolence Department",
+    title: "Benevolence Department Gallery",
+    description: "Helping the Needy and supporting the welfare of members.",
+    images: ["/assets/images/benevolence-head.jpg"],
+    audioUrl: "Benevolence Sunday",
+    videoUrl: "Benevolence Outreach"
+  },
+  {
+    id: "evangelism",
+    category: "Evangelism Department",
+    title: "Evangelism Department Gallery",
+    description: "Spreading the Gospel to the ends of the earth.",
+    images: ["/assets/images/dept-head-evangelism.jpg"],
+    audioUrl: "Evangelism Training",
+    videoUrl: "Street Evangelism Highlights"
+  },
+  {
+    id: "holy-police",
+    category: "Holy Police",
+    title: "Holy Police Gallery",
+    description: "Maintaining order and security in the house of God.",
+    images: ["/assets/images/holy-police-head.jpg"],
+    audioUrl: "Security Briefing",
+    videoUrl: "Parade Highlights"
+  },
+  {
+    id: "technical",
+    category: "Technical Crew",
+    title: "Technical Crew Gallery",
+    description: "Ensuring excellence in audio-visual production.",
+    images: ["/assets/images/technical-crew-head.jpg"],
+    audioUrl: "Technical Workshop",
+    videoUrl: "Behind the Scenes"
+  },
+  {
+    id: "works",
+    category: "Works Department",
+    title: "Works Department Gallery",
+    description: "Building and maintaining the physical structure.",
+    images: ["/assets/images/works-head.jpg"],
+    audioUrl: "Maintenance Report",
+    videoUrl: "Construction Update"
+  }
+];
 
 function EventPage(props) {
-  // get the params
-  // http://localhost:3000/events/queen-esther?month=april <-- this is how they look for monthly and below for yearly
-  // http://localhost:3000/events/grace
-  // constants
-  let month = null //if null Yearly esle monthly 
-  let eventType=null //event type to be used for query
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const eventSlug = params?.event; 
+  const typeParam = searchParams.get('type'); // e.g. ?type=video
 
-  // monthly events will have one filter which is month , but yearly events will have both month and year filters
-  // states
-const [ isMonthly, setMonthly]=useState(false);
-const [ isYearly, setYearly]=useState(false);
+  // State
+  const [selectedCategory, setSelectedCategory] = useState(eventSlug || 'grace');
+  const [activeTab, setActiveTab] = useState('gallery');
+  const [filteredData, setFilteredData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-// functions
-const getParameterFromUrl=()=>{
-  // get the params from the slug and set event and , then check if there is month parameter if there is set isMonthly to true and isYearly to false , if not set isYearly to true and isMonthly false.
+  // Handle Tab from URL
+  useEffect(() => {
+    if (typeParam && ['gallery', 'audio', 'video'].includes(typeParam)) {
+      setActiveTab(typeParam);
+    }
+  }, [typeParam]);
 
+  // Handle Data Fetching/Filtering with Loader
+  useEffect(() => {
+    setIsLoading(true);
+    setCurrentPage(1);
+    // Simulate network delay
+    const timer = setTimeout(() => {
+      const data = mediaData.find(item => item.id === selectedCategory) || mediaData[0];
+      setFilteredData(data);
+      setIsLoading(false);
+    }, 800); 
+
+    return () => clearTimeout(timer);
+  }, [selectedCategory]);
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  // Custom Loader Component
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        <div className="animate-pulse flex flex-col items-center">
+           <Image 
+             src="/assets/images/hog-logo.png" 
+             alt="Loading..." 
+             width={120} 
+             height={120} 
+             className="object-contain" 
+           />
+           <p className="mt-4 text-gray-500 font-bold text-lg tracking-widest">LOADING...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!filteredData) return <div className="pt-24 text-center">Data not found</div>;
+
+  // Pagination Logic for Gallery
+  const indexOfLastImage = currentPage * itemsPerPage;
+  const indexOfFirstImage = indexOfLastImage - itemsPerPage;
+  const currentImages = filteredData.images ? filteredData.images.slice(indexOfFirstImage, indexOfLastImage) : [];
+
+  return (
+    <div className="container mx-auto p-4 mt-40 min-h-screen">
+      {/* Tabs Navigation */}
+      <div className="flex gap-2 mb-4 overflow-x-auto justify-center md:justify-start">
+        {['gallery', 'audio', 'video'].map((tab) => (
+          <button 
+            key={tab}
+            className={`py-2 px-8 font-bold text-lg rounded-full transition-all duration-300 capitalize whitespace-nowrap ${
+              activeTab === tab 
+                ? 'bg-warning text-white shadow-md transform scale-105' 
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+            }`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Header & Filter */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b pb-6">
+        <div>
+          <h1 className="text-warning text-3xl font-bold uppercase">{filteredData.title}</h1>
+          <h2 className="text-black text-lg mt-2 opacity-80">{filteredData.description}</h2>
+        </div>
+        
+        <div className="w-full md:w-auto">
+          <label className="block text-sm font-bold mb-2 text-gray-600">Select Category:</label>
+          <select 
+            className="border-2 border-gray-200 p-2 rounded w-full md:w-64 focus:border-warning outline-none transition-colors" 
+            value={selectedCategory} 
+            onChange={handleCategoryChange}
+          >
+            {mediaData.map(item => (
+              <option key={item.id} value={item.id}>{item.category}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Content Area */}
+      <div className="min-h-[400px] animate-fadeIn">
+        
+        {/* Gallery Tab */}
+        {activeTab === 'gallery' && (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {currentImages.length > 0 ? (
+                currentImages.map((img, index) => (
+                <div key={index} className="group relative h-64 cursor-pointer overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-all duration-300">
+                  <Image 
+                    src={img} 
+                    alt={`${filteredData.title} ${indexOfFirstImage + index}`} 
+                    fill 
+                    className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                </div>
+              ))
+            ) : (
+              <EmptyState type="Images" />
+            )}
+            </div>
+            {filteredData.images && filteredData.images.length > itemsPerPage && (
+              <Pagination 
+                itemsPerPage={itemsPerPage} 
+                totalItems={filteredData.images.length} 
+                paginate={setCurrentPage} 
+                currentPage={currentPage} 
+              />
+            )}
+          </div>
+        )}
+
+        {/* Audio Tab */}
+        {activeTab === 'audio' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredData.audioUrl ? (
+               <MediaCard type="audio" title={filteredData.audioUrl} />
+            ) : (
+              <EmptyState type="Audio" />
+            )}
+          </div>
+        )}
+
+        {/* Video Tab */}
+        {activeTab === 'video' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredData.videoUrl ? (
+               <MediaCard type="video" title={filteredData.title} src={filteredData.videoUrl} />
+            ) : (
+              <EmptyState type="Videos" />
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
-const filterInputUpdate=()=>{
-  // show all the years and months (for monthly)y available for the event
-}
-// useEffect will set to which onload of page
 
-  return <div>
-    {/* the title will appera in text-warning and text below bigger in text-black */}
-    {/* the filter will be a dropdown for month and year if yearly or just month if monthly */}
-    {/* next is the flex box shared between the image and the page text content */}
-    {/* next is the gallery  for images of current page events , of count 8 images (count can be changed) */}
-    {/* next is the pagination for the gallery images */}
-    {/* each gallery image can be clicked to open a modal with the image and button previous and next */}
-  </div>;
+// Universal Media Card Component for Symmetry
+function MediaCard({ type, title, src }) {
+  const isVideoFile = type === 'video' && typeof src === 'string' && (src.includes('/') || src.endsWith('.mp4'));
+
+  return (
+    <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+      <div className={`relative ${type === 'video' ? 'aspect-video' : 'h-32'} bg-gray-900 flex items-center justify-center`}>
+        {isVideoFile ? (
+          <video controls className="w-full h-full object-cover">
+            <source src={src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-white">
+            {type === 'audio' ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-2 opacity-80">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-2 opacity-80">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+            )}
+          </div>
+        )}
+      </div>
+      <div className="p-5 flex-grow flex flex-col justify-between">
+        <h3 className="font-bold text-gray-800 text-lg mb-2 line-clamp-2">{title.replace(/\/|mp4|assets|videos/g, '')}</h3>
+        <button className="w-full mt-4 py-2 bg-gray-50 text-gray-600 hover:bg-warning hover:text-white rounded-lg transition-colors font-medium text-sm uppercase tracking-wide">
+          {type === 'audio' ? 'Listen Now' : 'Watch Now'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Empty State Component
+function EmptyState({ type }) {
+  return (
+    <div className="col-span-full flex flex-col items-center justify-center py-12 text-gray-400 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 mb-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+      <p className="text-lg font-medium">No {type} found for this category.</p>
+    </div>
+  );
+}
+
+// Pagination Component
+function Pagination({ itemsPerPage, totalItems, paginate, currentPage }) {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <div className="flex justify-center mt-8 gap-2">
+      <button
+        onClick={() => paginate(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="px-4 py-2 border rounded disabled:opacity-50 hover:bg-gray-100 transition-colors"
+      >
+        Prev
+      </button>
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`px-4 py-2 border rounded transition-colors ${currentPage === number ? 'bg-warning text-white border-warning' : 'hover:bg-gray-100'}`}
+        >
+          {number}
+        </button>
+      ))}
+      <button
+        onClick={() => paginate(currentPage + 1)}
+        disabled={currentPage === pageNumbers.length}
+        className="px-4 py-2 border rounded disabled:opacity-50 hover:bg-gray-100 transition-colors"
+      >
+        Next
+      </button>
+    </div>
+  );
 }
 
 export default EventPage;

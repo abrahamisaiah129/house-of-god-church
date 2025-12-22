@@ -2,6 +2,7 @@
 
 // import BaseFooter from '@/components/BaseFooter';
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import EventsFilter from "./EventsFilter";
 import EventsGallery from "./EventsGallery";
 import EventModal from "./EventModal";
@@ -246,10 +247,110 @@ const eventData = [
     description: "Our church and community Christmas lights display.",
     images: ["/assets/images/Rectangle 4.png"],
   },
+  // Gallery: About Church
+  {
+    id: 24,
+    title: "Church Sanctuary",
+    type: "Gallery: About Church",
+    date: "2024",
+    month: "",
+    year: "2024",
+    description: "Views of our beautiful sanctuary.",
+    images: ["/assets/images/ca1.png", "/assets/images/ca3.png"],
+  },
+  // Gallery: About Pastor
+  {
+    id: 25,
+    title: "Rev. Chris Okotie",
+    type: "Gallery: About Pastor",
+    date: "2024",
+    month: "",
+    year: "2024",
+    description: "Moments with our Pastor.",
+    images: ["/assets/images/pastor.jpg"],
+  },
+  // Gallery: Departments
+  {
+    id: 26,
+    title: "Children's Department",
+    type: "Gallery: Children's Department",
+    date: "2024",
+    month: "",
+    year: "2024",
+    description: "Activities in the Children's Department.",
+    images: ["/assets/images/ca3.png"],
+  },
+  {
+    id: 27,
+    title: "Benevolence Ministry",
+    type: "Gallery: Benevolence",
+    date: "2024",
+    month: "",
+    year: "2024",
+    description: "Reaching out to the community.",
+    images: ["/assets/images/Rectangle 4.png"],
+  },
+  {
+    id: 28,
+    title: "Choir Ministration",
+    type: "Gallery: Music",
+    date: "2024",
+    month: "",
+    year: "2024",
+    description: "The choir leading worship.",
+    images: ["/assets/images/book.png"],
+  },
 ];
+
+const ITEMS_PER_PAGE = 9;
+
+const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  if (totalPages <= 1) return null;
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  return (
+    <div className="pagination mt-5 justify-content-center">
+      <Link
+        href="#"
+        className={currentPage === 1 ? "disabled" : ""}
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage !== 1) onChangePage(currentPage - 1);
+        }}
+      >
+        <i className="fas fa-chevron-left"></i>
+      </Link>
+      {pages.map((p) => (
+        <Link
+          href="#"
+          key={p}
+          className={p === currentPage ? "active" : ""}
+          onClick={(e) => {
+            e.preventDefault();
+            onChangePage(p);
+          }}
+        >
+          {p}
+        </Link>
+      ))}
+      <Link
+        href="#"
+        className={currentPage === totalPages ? "disabled" : ""}
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage !== totalPages) onChangePage(currentPage + 1);
+        }}
+      >
+        <i className="fas fa-chevron-right"></i>
+      </Link>
+    </div>
+  );
+};
 
 export default function EventsPage() {
   const [filteredEvents, setFilteredEvents] = useState(eventData);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -287,6 +388,24 @@ export default function EventsPage() {
     ),
   ];
 
+  const departments = [
+    "Children's Department",
+    "Benevolence",
+    "Ushering",
+    "Security",
+    "Sanitation",
+    "Technical",
+    "Music",
+    "Publishing",
+    "Medical",
+  ];
+
+  const galleryTypes = [
+    "Gallery: About Church",
+    "Gallery: About Pastor",
+    ...departments.map((dept) => `Gallery: ${dept}`),
+  ];
+
   const eventTypes = [
     "Fellowship Sunday",
     "Christmas Carol Competition",
@@ -296,6 +415,7 @@ export default function EventsPage() {
     "Queen Esther",
     "Grace",
     "Christmas Lights",
+    ...galleryTypes,
   ];
 
   const handleFilter = (filters) => {
@@ -306,7 +426,8 @@ export default function EventsPage() {
       const searchMatch =
         !search ||
         item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase());
+        item.description.toLowerCase().includes(search.toLowerCase()) ||
+        (item.date && item.date.toLowerCase().includes(search.toLowerCase()));
 
       // Event type match
       const typeMatch = !eventType || item.type === eventType;
@@ -321,6 +442,7 @@ export default function EventsPage() {
     });
 
     setFilteredEvents(filtered);
+    setCurrentPage(1);
   };
 
   const handleEventClick = (event) => {
@@ -332,6 +454,11 @@ export default function EventsPage() {
     setIsModalOpen(false);
     setSelectedEvent(null);
   };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentEvents = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
@@ -351,27 +478,13 @@ export default function EventsPage() {
           onFilter={handleFilter}
         />
 
-        <EventsGallery
-          events={filteredEvents}
-          onEventClick={handleEventClick}
-        />
+        <EventsGallery events={currentEvents} onEventClick={handleEventClick} />
 
-        <div className="pagination mt-5">
-          <a href="#">
-            <i className="fas fa-chevron-left"></i>
-          </a>
-          <a href="#" className="active">
-            1
-          </a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <span>...</span>
-          <a href="#">14</a>
-          <a href="#">15</a>
-          <a href="#">
-            <i className="fas fa-chevron-right"></i>
-          </a>
-        </div>
+        <PaginationComponent
+          totalItems={filteredEvents.length}
+          currentPage={currentPage}
+          onChangePage={setCurrentPage}
+        />
 
         {isModalOpen && selectedEvent && (
           <EventModal event={selectedEvent} onClose={handleCloseModal} />

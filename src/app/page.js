@@ -7,6 +7,7 @@ import WatchSermons from "@/components/WatchSermons";
 import Programmes from "@/components/Programmes";
 import BookSection from "@/components/BookSection";
 import ContactSection from "@/components/ContactSection";
+import AnnouncementsCarousel from "@/components/AnnouncementsCarousel";
 
 // This file must be in src/components/WelcomeVideoPopup.js
 import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
@@ -17,7 +18,10 @@ export default function Home() {
       <ChurchHero />
       <AboutChurch />
       <WatchSermons />
+      {/* Announcements carousel — placed near Programmes */}
+
       <Programmes />
+      <AnnouncementsCarousel />
       <BookSection />
       <ContactSection />
 

@@ -10,18 +10,19 @@ export default function ChildrenDepartmentPage() {
       <div className="w-full">
         <ChurchHero title="CHILDREN'S DEPARTMENT" />
 
+        {/* the new template here  below */}
         <div className="max-w-7xl mx-auto py-20 px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center pb-14 tracking-wide !bg-white border-l-4 border-r-4 border-[#ffd700] shadow-lg rounded-2xl p-3 md:p-3 w-fit !mb-6 mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center pb-14 tracking-wide">
             CHILDREN&apos;S DEPARTMENT
           </h2>
 
           <div className="grid md:grid-cols-5 gap-12 items-start">
             <div className="flex flex-col items-center text-center sm:col-span-2">
-              <h2 className="!text-2xl font-semibold mb-6">
+              <h2 className="text-2xl font-semibold mb-6">
                 Meet Our Head of Department
               </h2>
 
-              <div className="w-full aspect-[4/5] relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.04]">
+              <div className="w-full aspect-4/5 relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.04]">
                 <Image
                   src="/assets/images/children-church-head.jpg"
                   alt="Head of Department"
@@ -31,7 +32,7 @@ export default function ChildrenDepartmentPage() {
                 />
               </div>
 
-              <h2 className="!text-2xl font-semibold pt-8">
+              <h2 className="text-2xl! font-semibold pt-8">
                 Sis. Stella Ogweh
               </h2>
 
@@ -41,7 +42,7 @@ export default function ChildrenDepartmentPage() {
 
               <a
                 href="mailto:childrens_church@householdofgodchurch.org"
-                className="!text-[#ffd700] mt-3 font-medium !no-underline"
+                className="text-[#ffd700]! mt-3 font-medium no-underline!"
               >
                 <i className="fas fa-envelope me-2"></i>{" "}
                 childrens_church@householdofgodchurch.org

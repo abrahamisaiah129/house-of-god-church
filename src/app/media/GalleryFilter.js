@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
-export default function GalleryFilter({ months, years, categories, eventTypes, onFilter }) {
+export default function GalleryFilter({ months, years, categories, onFilter }) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [eventType, setEventType] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
 
@@ -14,7 +13,6 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
     applyFilters({ 
       search: e.target.value, 
       category, 
-      eventType: category === "Pastor's Gallery" ? '' : eventType, 
       month, 
       year 
     });
@@ -23,25 +21,9 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
   const handleCategoryChange = (e) => {
     const newCategory = e.target.value;
     setCategory(newCategory);
-    // Reset event type when switching to Pastor's Gallery
-    if (newCategory === "Pastor's Gallery") {
-      setEventType('');
-    }
     applyFilters({ 
       search, 
       category: newCategory, 
-      eventType: newCategory === "Pastor's Gallery" ? '' : eventType, 
-      month, 
-      year 
-    });
-  };
-
-  const handleEventTypeChange = (e) => {
-    setEventType(e.target.value);
-    applyFilters({ 
-      search, 
-      category, 
-      eventType: e.target.value, 
       month, 
       year 
     });
@@ -52,7 +34,6 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
     applyFilters({ 
       search, 
       category, 
-      eventType, 
       month: e.target.value, 
       year 
     });
@@ -63,7 +44,6 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
     applyFilters({ 
       search, 
       category, 
-      eventType, 
       month, 
       year: e.target.value 
     });
@@ -76,13 +56,11 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
   const clearFilters = () => {
     setSearch('');
     setCategory('');
-    setEventType('');
     setMonth('');
     setYear('');
     onFilter({ 
       search: '', 
       category: '', 
-      eventType: '', 
       month: '', 
       year: '' 
     });
@@ -115,20 +93,6 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
       </select>
       
       <select 
-        value={eventType} 
-        onChange={handleEventTypeChange}
-        disabled={category === "Pastor's Gallery"}
-        className="form-select w-100 w-md-auto rounded-pill"
-      >
-        <option value="">All Event Types</option>
-        {eventTypes.map((type) => (
-          <option key={type} value={type}>
-            {type}
-          </option>
-        ))}
-      </select>
-      
-      <select 
         value={month} 
         onChange={handleMonthChange}
         className="form-select w-100 w-md-auto rounded-pill"
@@ -154,7 +118,7 @@ export default function GalleryFilter({ months, years, categories, eventTypes, o
         ))}
       </select>
 
-      <button 
+  <button 
         onClick={clearFilters}
         className="btn btn-outline-warning rounded-pill px-4"
       >

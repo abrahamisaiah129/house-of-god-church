@@ -7,9 +7,7 @@ import Image from "next/image";
 // Fixed imports — exact file names + case-sensitive
 import FilterDropdown from "./components/FilterDropdown";
 import GalleryGrid from "./components/GalleryGrid"; // Matches GalleryGrid.js
-import Pagination from "./components/Pagination";
 import LightboxModal from "./components/Lightboxmodal"; // Matches LightboxModal.js
-
 
 // ====================== EVENT DATA ======================
 const eventData = {
@@ -394,6 +392,42 @@ const eventData = {
 // Keep hyphens, only lowercase
 const slugToKey = (slug) => slug?.toLowerCase() || "";
 
+// Local Pagination Component to match global style
+const Pagination = ({ current, total, onChange }) => {
+  if (total <= 1) return null;
+  const pages = Array.from({ length: total }, (_, i) => i + 1);
+
+  return (
+    <div className="pagination mt-5 justify-content-center">
+      <button
+        className={current === 1 ? "disabled" : ""}
+        onClick={() => current > 1 && onChange(current - 1)}
+        disabled={current === 1}
+      >
+        <i className="fas fa-chevron-left"></i>
+      </button>
+
+      {pages.map((p) => (
+        <button
+          key={p}
+          className={p === current ? "active" : ""}
+          onClick={() => onChange(p)}
+        >
+          {p}
+        </button>
+      ))}
+
+      <button
+        className={current === total ? "disabled" : ""}
+        onClick={() => current < total && onChange(current + 1)}
+        disabled={current === total}
+      >
+        <i className="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  );
+};
+
 export default function EventPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -479,7 +513,7 @@ export default function EventPage() {
 
   return (
     <>
-      <div className="container py-12">
+      <div className="container mt-5 py-12">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-warning">{config.title}</h1>
           <p className="text-2xl mt-3 text-black">{config.slogan}</p>
@@ -576,8 +610,6 @@ export default function EventPage() {
           onNext={() => setLightboxIndex((i) => (i + 1) % gallery.length)}
         />
       )}
- 
-      
     </>
   );
 }

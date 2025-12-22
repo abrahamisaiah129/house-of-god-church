@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 
 export default function Programmes() {
   // helper to get the next Sunday date (if today is Sunday, returns next week's Sunday)
@@ -51,11 +51,10 @@ export default function Programmes() {
   ];
 
   // Sort programmes by ascending priority (1 = highest)
-  const sortedProgrammes = useMemo(() => {
-    return [...programmes].sort(
-      (a, b) => (a.priority || 999) - (b.priority || 999)
-    );
-  }, [nextSunday.date, nextSunday.month]);
+  // Compute on each render (array is small) to avoid fragile memoization warnings
+  const sortedProgrammes = [...programmes].sort(
+    (a, b) => (a.priority || 999) - (b.priority || 999)
+  );
 
   // Static site-wide service times / info (shown in See More popup)
   const serviceTimes = [
@@ -77,7 +76,7 @@ export default function Programmes() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="container programme-section">
+    <div className="container programme-section" id="programmes">
       <h2 className="text-center fw-bold mb-4">PROGRAMMES</h2>
       <div className="row g-4 justify-content-center">
         {sortedProgrammes.map((programme, index) => (

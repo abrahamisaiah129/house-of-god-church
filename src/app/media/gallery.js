@@ -6,62 +6,14 @@ import Link from "next/link";
 import GalleryFilter from "./GalleryFilter";
 import GalleryGrid from "./GalleryGrid";
 import GalleryModal from "./GalleryModal";
+import {
+  mediaData,
+  MEDIA_CATEGORIES,
+  ALL_MONTHS,
+  EVENT_TYPES,
+} from "./mediaData";
 
-// --- Static Data (Omitted for brevity, but remains above the component) ---
-const galleryData = [
-  // ... your gallery data ...
-  {
-    id: 1,
-    title: "Pastor Teaching Sunday Service",
-    type: "Pastor's Gallery",
-    category: "Pastor's Gallery",
-    date: "January 2025",
-    month: "January",
-    year: "2025",
-    description: "Pastor delivering a powerful sermon during Sunday service.",
-    images: ["/assets/images/ca1.png", "/assets/images/ca3.png"],
-  },
-  // ... (rest of data)
-  {
-    id: 16,
-    title: "Christmas Lights 2024",
-    type: "Christmas Lights",
-    category: "Church's Gallery",
-    date: "December 2024",
-    month: "December",
-    year: "2024",
-    description: "Our church and community Christmas lights display.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-];
-
-const ALL_MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-const CATEGORIES = ["Pastor's Gallery", "Church's Gallery"];
-const EVENT_TYPES = [
-  "Fellowship Sunday",
-  "Christmas Carol Competition",
-  "Halleluyah Party",
-  "Baby Dedication",
-  "Weddings",
-  "Queen Esther",
-  "Grace",
-  "Christmas Lights",
-];
 const ITEMS_PER_PAGE = 6;
-// --- End Static Data ---
 
 // --- Pagination Component (FIXED: Uses modern Link syntax) ---
 const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
@@ -76,8 +28,8 @@ const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
         href="#"
         className={currentPage === 1 ? "disabled" : ""}
         onClick={(e) => {
+          e.preventDefault();
           if (currentPage !== 1) {
-            e.preventDefault();
             onChangePage(currentPage - 1);
           }
         }}
@@ -106,8 +58,8 @@ const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
         href="#"
         className={currentPage === totalPages ? "disabled" : ""}
         onClick={(e) => {
+          e.preventDefault();
           if (currentPage !== totalPages) {
-            e.preventDefault();
             onChangePage(currentPage + 1);
           }
         }}
@@ -126,36 +78,51 @@ export default function GalleryPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Use mediaData for gallery items (filtering for items that have images)
+  const galleryItems = useMemo(
+    () =>
+      mediaData.filter(
+        (item) =>
+          item.images && item.images.length > 0 && !item.video && !item.audio
+      ),
+    []
+  );
+
   // --- Data Extraction (Memoized for efficiency) ---
   const uniqueMonths = useMemo(
     () => [
       ...new Set(
-        galleryData
-          .filter((item) => item.month)
-          .map((item) => item.month)
+        galleryItems
+          .filter((item) => item.date)
+          .map((item) =>
+            new Date(item.date).toLocaleString("default", { month: "long" })
+          )
           .sort((a, b) => ALL_MONTHS.indexOf(a) - ALL_MONTHS.indexOf(b))
       ),
     ],
-    []
+    [galleryItems]
   );
 
   const uniqueYears = useMemo(
     () => [
       ...new Set(
-        galleryData
-          .filter((item) => item.year)
-          .map((item) => item.year)
+        galleryItems
+          .map((item) => new Date(item.date).getFullYear().toString())
           .sort((a, b) => b - a)
       ),
     ],
-    []
+    [galleryItems]
   );
 
   // 1. Filtering Logic: Use useMemo to re-filter only when filters change
   const filteredItems = useMemo(() => {
     const { search, category, eventType, month, year } = currentFilters;
 
-    const filtered = galleryData.filter((item) => {
+    const filtered = galleryItems.filter((item) => {
+      const itemDate = new Date(item.date);
+      const itemMonth = itemDate.toLocaleString("default", { month: "long" });
+      const itemYear = itemDate.getFullYear().toString();
+
       // Search query match
       const searchMatch =
         !search ||
@@ -169,9 +136,9 @@ export default function GalleryPage() {
         item.type === eventType ||
         item.category === "Pastor's Gallery";
       // Month match
-      const monthMatch = !month || item.month === month;
+      const monthMatch = !month || itemMonth === month;
       // Year match
-      const yearMatch = !year || item.year === year;
+      const yearMatch = !year || itemYear === year;
 
       return (
         searchMatch && categoryMatch && typeMatch && monthMatch && yearMatch
@@ -179,7 +146,7 @@ export default function GalleryPage() {
     });
 
     return filtered;
-  }, [currentFilters]);
+  }, [currentFilters, galleryItems]);
 
   // 2. Pagination Logic: Slice the filtered array for the current page
   const paginatedItems = useMemo(() => {
@@ -215,7 +182,11 @@ export default function GalleryPage() {
   return (
     <>
       {/* title */}
-      <div className="container py-5 my-5">
+      <div
+        className="container 
+      py-5 
+      my-5"
+      >
         <div className="text-center mb-5">
           <h2 className="fw-bold text-warning mb-2">Explore Our Gallery</h2>
           <p className="lead text-secondary">
@@ -228,7 +199,7 @@ export default function GalleryPage() {
         <GalleryFilter
           months={uniqueMonths}
           years={uniqueYears}
-          categories={CATEGORIES}
+          categories={MEDIA_CATEGORIES}
           eventTypes={EVENT_TYPES}
           onFilter={handleFilter}
         />

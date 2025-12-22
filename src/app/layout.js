@@ -112,7 +112,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
-        className={`${poppins.className} font-sans antialiased bg-[var(--background)] text-[var(--foreground)]`}
+        className={`${poppins.className} font-sans antialiased bg-(--background) text-round)`}
       >
         {children}
 

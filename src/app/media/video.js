@@ -1,148 +1,129 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 // File: ./video.js
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link"; // Used for pagination links
+import { mediaData, MEDIA_CATEGORIES } from "./mediaData";
+import GalleryFilter from "./GalleryFilter";
 
-// --- Data Definition (Omitted for brevity) ---
-const ALL_VIDEOS = [
-  // ... your video data
-  {
-    title: "Sunday Service - January 2025",
-    date: "Jan 12, 2025",
-    description:
-      "A vibrant worship service to start the new year with faith and fellowship.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "Christmas Carol Service 2024",
-    date: "Dec 20, 2024",
-    description:
-      "A heartwarming celebration of Christ’s birth with carols and worship.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "Halleluyah Crossover Service 2024",
-    date: "Dec 31, 2024",
-    description:
-      "An inspiring crossover service filled with praise and testimonies.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "Children’s Sunday School Event 2024",
-    date: "Aug 25, 2024",
-    description:
-      "A joyful event for children with songs, stories, and activities.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "Easter Resurrection Service 2024",
-    date: "Apr 19, 2024",
-    description:
-      "Celebrating the resurrection of Jesus Christ with worship and reflection.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "Children’s Sunday School Session 2024",
-    date: "Aug 25, 2023",
-    description: "An engaging session for children to learn about God’s love.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-  {
-    title: "New Year Resurrection Service 2024",
-    date: "Apr 19, 2024",
-    description:
-      "Celebrating the resurrection of Jesus Christ with worship and reflection.",
-    src: "https://www.youtube.com/embed/lhfk1X072kc",
-  },
-];
 const ITEMS_PER_PAGE = 6;
 
-// --- Sub-components (VideoCard and PaginationComponent—the latter is identical to audio.js) ---
+// Helper to extract embed URL from various YouTube formats
+const getEmbedUrl = (url) => {
+  if (!url) return "";
+  if (url.includes("embed")) return url;
+  if (url.includes("youtu.be"))
+    return `https://www.youtube.com/embed/${url.split("/").pop()}`;
+  const v = url.split("v=")[1];
+  if (v) return `https://www.youtube.com/embed/${v.split("&")[0]}`;
+  return url;
+};
 
-const VideoCard = ({ video }) => (
+export const VideoCard = ({ video, onWatch }) => (
   <div className="col video-card">
-       {" "}
     <div className="card h-100 shadow-sm border-0">
-           {" "}
-      <div className="ratio ratio-16x9">
-               {" "}
-        <iframe
-          src={video.src}
-          title={video.title}
-          allowFullScreen
-          frameBorder="0"
-        ></iframe>
-             {" "}
+      <div
+        className="ratio ratio-16x9 bg-dark position-relative"
+        style={{ cursor: "pointer" }}
+        onClick={() => onWatch(video)}
+      >
+        {video.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={video.image}
+            alt={video.title}
+            className="w-100 h-100 object-fit-cover opacity-75"
+          />
+        ) : (
+          <div className="d-flex align-items-center justify-content-center h-100 text-white">
+            <i className="fas fa-video fa-3x opacity-50"></i>
+          </div>
+        )}
+        <div
+          className="position-absolute top-0 start-0 m-2"
+          style={{ zIndex: 2 }}
+        >
+          <span className="badge bg-warning text-dark">
+            {video.category || "Video"}
+          </span>
+        </div>
+        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+          <i className="fas fa-play-circle fa-4x text-white opacity-75 hover-opacity-100 transition"></i>
+        </div>
       </div>
-           {" "}
       <div className="card-body">
-                <h5 className="card-title fw-bold">{video.title}</h5>       {" "}
-        <p className="text-muted small mb-1">Uploaded: {video.date}</p>       {" "}
-        <p className="card-text">{video.description}</p>     {" "}
+        <h5 className="card-title fw-bold">{video.title}</h5>
+        <p className="text-muted small mb-1">Uploaded: {video.date}</p>
+        <p
+          className="card-text"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {video.description}
+        </p>
       </div>
-         {" "}
     </div>
-     {" "}
   </div>
 );
+
+// Video Modal Component
+export const VideoModal = ({ video, onClose }) => {
+  if (!video) return null;
+
+  return (
+    <div
+      className="modal fade show d-block"
+      tabIndex="-1"
+      style={{ backgroundColor: "rgba(0,0,0,0.8)", zIndex: 1055 }}
+    >
+      <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-content bg-black border-0">
+          <div
+            className="modal-header border-0 p-2 position-absolute top-0 end-0"
+            style={{ zIndex: 10 }}
+          >
+            <button
+              type="button"
+              className="btn-close btn-close-white bg-white rounded-circle p-2 opacity-100"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body p-0">
+            <div className="ratio ratio-16x9">
+              <iframe
+                src={`${getEmbedUrl(video.video)}?autoplay=1`}
+                title={video.title}
+                allowFullScreen
+                allow="autoplay; encrypted-media"
+                className="rounded"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Pagination Component (FIXED: Uses the modern Link syntax)
 const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-
   if (totalPages <= 1) return null;
-
-  const renderPages = () => {
-    const pages = [];
-    const maxPagesToShow = 5;
-    let start = Math.max(1, currentPage - 2);
-    let end = Math.min(totalPages, start + maxPagesToShow - 1);
-    if (end - start + 1 < maxPagesToShow)
-      start = Math.max(1, end - maxPagesToShow + 1);
-
-    if (start > 1) {
-      pages.push(1);
-      if (start > 2) pages.push("...");
-    }
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    if (end < totalPages) {
-      if (end < totalPages - 1) pages.push("...");
-      pages.push(totalPages);
-    }
-
-    return pages.map((p, index) => (
-      <React.Fragment key={index}>
-        {p === "..." ? (
-          <span className="px-2">...</span>
-        ) : (
-          <Link
-            href="#"
-            className={`pagination-link ${p === currentPage ? "active" : ""}`}
-            onClick={(e) => {
-              e.preventDefault();
-              onChangePage(p);
-            }}
-          >
-            {p}
-          </Link>
-        )}
-      </React.Fragment>
-    ));
-  };
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="pagination mt-5" id="videoPagination">
+    <div className="pagination mt-5 justify-content-center">
       {/* Previous Button */}
       <Link
         href="#"
         className={currentPage === 1 ? "disabled" : ""}
         onClick={(e) => {
+          e.preventDefault();
           if (currentPage !== 1) {
-            e.preventDefault();
             onChangePage(currentPage - 1);
           }
         }}
@@ -151,15 +132,28 @@ const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
         <i className="fas fa-chevron-left"></i>
       </Link>
 
-      {renderPages()}
+      {/* Page Links */}
+      {pages.map((p) => (
+        <Link
+          href="#"
+          key={p}
+          className={p === currentPage ? "active" : ""}
+          onClick={(e) => {
+            e.preventDefault();
+            onChangePage(p);
+          }}
+        >
+          {p}
+        </Link>
+      ))}
 
       {/* Next Button */}
       <Link
         href="#"
         className={currentPage === totalPages ? "disabled" : ""}
         onClick={(e) => {
+          e.preventDefault();
           if (currentPage !== totalPages) {
-            e.preventDefault();
             onChangePage(currentPage + 1);
           }
         }}
@@ -173,24 +167,71 @@ const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
 
 // --- Main VideoPage Component ---
 export default function VideoPage() {
-  const [videoQuery, setVideoQuery] = useState("");
+  const [currentFilters, setCurrentFilters] = useState({});
   const [videoCurrentPage, setVideoCurrentPage] = useState(1); // 1. Filtering Logic
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  // Use mediaData instead of ALL_VIDEOS
+  const allVideos = useMemo(() => mediaData.filter((item) => item.video), []);
+
+  // Extract unique filter data
+  const uniqueMonths = useMemo(() => {
+    const months = allVideos.map((a) =>
+      new Date(a.date).toLocaleString("default", { month: "long" })
+    );
+    const monthsOrder = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return [...new Set(months)].sort(
+      (a, b) => monthsOrder.indexOf(a) - monthsOrder.indexOf(b)
+    );
+  }, [allVideos]);
+
+  const uniqueYears = useMemo(() => {
+    const years = allVideos.map((a) =>
+      new Date(a.date).getFullYear().toString()
+    );
+    return [...new Set(years)].sort((a, b) => b - a);
+  }, [allVideos]);
+
+  const categories = MEDIA_CATEGORIES;
 
   const filteredVideos = useMemo(() => {
-    const query = videoQuery.toLowerCase();
-    if (!query) return ALL_VIDEOS;
+    const { search, category, month, year } = currentFilters;
 
-    return ALL_VIDEOS.filter(
-      (v) =>
-        v.title.toLowerCase().includes(query) ||
-        v.description.toLowerCase().includes(query) ||
-        v.date.toLowerCase().includes(query)
-    );
-  }, [videoQuery]); // 2. Reset page when search query changes
+    return allVideos.filter((item) => {
+      const itemDate = new Date(item.date);
+      const itemMonth = itemDate.toLocaleString("default", { month: "long" });
+      const itemYear = itemDate.getFullYear().toString();
 
-  useEffect(() => {
+      const searchMatch =
+        !search ||
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        (item.description &&
+          item.description.toLowerCase().includes(search.toLowerCase()));
+      const categoryMatch = !category || item.category === category;
+      const monthMatch = !month || itemMonth === month;
+      const yearMatch = !year || itemYear === year;
+
+      return searchMatch && categoryMatch && monthMatch && yearMatch;
+    });
+  }, [currentFilters, allVideos]);
+
+  const handleFilter = useCallback((filters) => {
+    setCurrentFilters(filters);
     setVideoCurrentPage(1);
-  }, [videoQuery]); // 3. Pagination Logic
+  }, []);
 
   const paginatedVideos = useMemo(() => {
     const start = (videoCurrentPage - 1) * ITEMS_PER_PAGE;
@@ -201,65 +242,49 @@ export default function VideoPage() {
   const changeVideoPage = useCallback((page) => setVideoCurrentPage(page), []);
 
   return (
-    <div className="container church-section">
-            {/* Video Section */}     {" "}
-      <div id="videoSection">
-               {" "}
-        <div className="text-center mb-5">
-                   {" "}
-          <h2 className="section-title text-warning fw-bold mb-2">
-                        Watch Our Services and Events          {" "}
-          </h2>
-          {/* FIX: Corrected typo 'text-secondaryfw-light' to 'text-secondary fw-light' */}
-                   {" "}
-          <p className="lead text-secondary fw-light church-text">
-                        Revisit powerful sermons, celebrations, and special
-            events,             including programs for children.          {" "}
-          </p>
-                 {" "}
-        </div>
-               {" "}
-        <div className="row justify-content-center mb-4">
-                   {" "}
-          <div className="col-md-6">
-                       {" "}
-            <input
-              type="text"
-              id="videoSearch"
-              className="form-control rounded-pill ps-4"
-              placeholder="Search videos..."
-              aria-label="Search videos"
-              value={videoQuery}
-              onChange={(e) => setVideoQuery(e.target.value)}
-            />
-                     {" "}
-          </div>
-                 {" "}
-        </div>
-               {" "}
-        <div
-          className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
-          id="videoGrid"
-        >
-                   {" "}
-          {paginatedVideos.length > 0 ? (
-            paginatedVideos.map((video, index) => (
-              <VideoCard key={index} video={video} />
-            ))
-          ) : (
-            <div className="col-12 text-center text-muted">No videos found</div>
-          )}
-                 {" "}
-        </div>
-               {" "}
-        <PaginationComponent
-          totalItems={filteredVideos.length}
-          currentPage={videoCurrentPage}
-          onChangePage={changeVideoPage}
-        />
-             {" "}
+    <div className="container py-5 my-5">
+      <div className="text-center mb-5">
+        <h2 className="section-title text-warning fw-bold mb-2">
+          Watch Our Services and Events
+        </h2>
+        <p className="lead text-secondary fw-light church-text">
+          Revisit powerful sermons, celebrations, and special events, including
+          programs for children.
+        </p>
       </div>
-         {" "}
+
+      {/* Filter */}
+      <GalleryFilter
+        months={uniqueMonths}
+        years={uniqueYears}
+        categories={categories}
+        onFilter={handleFilter}
+      />
+
+      <div
+        className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
+        id="videoGrid"
+      >
+        {paginatedVideos.length > 0 ? (
+          paginatedVideos.map((video, index) => (
+            <VideoCard key={index} video={video} onWatch={setSelectedVideo} />
+          ))
+        ) : (
+          <div className="col-12 text-center text-muted">No videos found</div>
+        )}
+      </div>
+      <PaginationComponent
+        totalItems={filteredVideos.length}
+        currentPage={videoCurrentPage}
+        onChangePage={changeVideoPage}
+      />
+      {/* Video Modal */}
+      {selectedVideo && (
+        <VideoModal
+          video={selectedVideo}
+          onClose={() => setSelectedVideo(null)}
+        />
+      )}
     </div>
   );
 }

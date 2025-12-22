@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import Header from "@/components/Navigation";
 import BaseFooter from "@/components/BaseFooter";
-import Banner from "@/components/Banner";
+import ChurchHero from "@/components/ChurchHero";
 export default function ConvertsPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -49,7 +49,8 @@ export default function ConvertsPage() {
       {/* the navigation bar here  */}
       <Header />
       {/* Hero Banner  */}
-      <Banner title={"NEW CONVERTS"} highlight="Welcome to" />
+      {/* <Banner title={"NEW CONVERTS"} highlight="Welcome to" /> */}
+      <ChurchHero title="NEW CONVERTS" />
 
       <div className="container py-5">
         {/* Progress Steps */}

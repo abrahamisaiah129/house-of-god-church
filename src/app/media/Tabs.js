@@ -61,22 +61,23 @@ export default function Tabs({ Video, Audio, Gallery }) {
   }
 
   return (
-    <div className="container church-section">
-      <div className="row justify-content-center mb-5">
+    <div className="container church-section ">
+      <div className="row justify-content-center mb-1">
         <div className="col-12 col-md-10 col-lg-8">
           {/* Tab Navigation */}
           <ul className="nav nav-pills nav-fill mb-4 media-tabs">
             {availableTabs.map((tab) => (
               <li className="nav-item " key={tab.id}>
                 <button
-                  className={`nav-link  ${
+                  className={`nav-link d-flex align-items-center justify-content-center ${
                     activeTabId === tab.id ? "active " : " "
                   }`}
                   onClick={() => setActiveTabId(tab.id)}
                   aria-controls={`${tab.id}-tab-content`}
                   aria-selected={activeTabId === tab.id}
                 >
-                  <i className={`${tab.icon} me-2`}></i> {tab.label}
+                  <i className={`${tab.icon} me-0 me-md-2`}></i>
+                  <span className="d-none d-md-inline">{tab.label}</span>
                 </button>
               </li>
             ))}
@@ -85,27 +86,32 @@ export default function Tabs({ Video, Audio, Gallery }) {
       </div>
 
       {/* Tab Content: Render the selected component */}
-      <div className="tab-content">{ActiveContent}</div>
+      <div>{ActiveContent}</div>
 
       {/* Custom styles for the tabs to ensure proper theming */}
       <style jsx global>{`
         .media-tabs .nav-link {
           cursor: pointer;
-          color: #212529; /* Default text color */
+          color: #212529;
           border: 1px solid #ffc107;
-          background-color: #f8f9fa; /* Light background */
-          transition: all 0.2s ease-in-out;
+          background-color: #f8f9fa;
+          transition: all 0.3s ease;
         }
         .media-tabs .nav-link:hover:not(.active) {
-          background-color: #ffe8a1; /* Light hover effect */
+          background-color: #ffe8a1;
+          transform: translateY(-3px);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
         .media-tabs .nav-link.active {
-          color: #ffc107; /* Active background (Yellow/Secondary) */
-          background-color: #212529; /* Active text color (Fixed to dark gray/black) */
+          color: #ffc107;
+          background-color: #212529;
           font-weight: bold;
         }
-        /* Add church-section styling here if it's not global */
-        /* .church-section { padding: 60px 0; } */
+
+        .church-section {
+          padding: 60px 0;
+          margin-top: 80px;
+        }
       `}</style>
     </div>
   );

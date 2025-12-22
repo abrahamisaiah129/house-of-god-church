@@ -114,7 +114,7 @@ export default function AboutPastorPage() {
         <ChurchHero title="Our Pastor" />
 
         <section className="sm:max-w-[80%] mx-auto py-20 px-4">
-          <h2 className="text-3xl md:text-4xl font-bold !mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-10! text-center">
             Meet Our Pastor
           </h2>
 
@@ -122,22 +122,28 @@ export default function AboutPastorPage() {
             {/* Single slide display with transition */}
             <div className="grid md:grid-cols-5 gap-8 items-start transition-opacity duration-500">
               <div className=" sm:col-span-2">
-                <h2 className="text-2xl font-bold pt-2">Rev Chris Okotie</h2>
+                <h2 className="text-2xl font-bold ">Rev Chris Okotie</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Pastor, Household of God Church
                 </p>
-                <div className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-lg leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
-                  <img 
-                    src={currentSlide.img} 
-                    alt="Pastor" 
-                    className="w-full h-full object-cover" 
+                <div className="w-full aspect-4/5 relative rounded-xl overflow-hidden shadow-lg leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1 ">
+                  <Image
+                    src={currentSlide.img}
+                    alt="Pastor"
+                    className="w-full h-full object-cover"
+                    width={500}
+                    height={400}
                   />
                 </div>
               </div>
 
               <div className="bg-white sm:col-span-3 border-l-4 border-[#ffd700] shadow-lg rounded-2xl p-8 md:p-10 leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
                 {currentSlide.text.map((paragraph, index) => (
-                  <p key={index} className="leading-relaxed text-gray-700 mb-6 text-justify">
+                  <p
+                    key={index}
+                    className="leading-relaxed text-gray-700 mb-6 text-justify"
+                    style={{ fontWeight: 500 }}
+                  >
                     {paragraph}
                   </p>
                 ))}
@@ -148,9 +154,12 @@ export default function AboutPastorPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-10">
               <button
                 onClick={() =>
-                  about.setIndex((prev) => (prev - 1 + pastorSlides.length) % pastorSlides.length)
+                  about.setIndex(
+                    (prev) =>
+                      (prev - 1 + pastorSlides.length) % pastorSlides.length
+                  )
                 }
-                className="w-full sm:w-auto px-8 py-3 rounded-full bg-gray-800 text-white hover:bg-gray-700 active:bg-gray-900 transition-colors font-medium text-base touch-manipulation"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-gray-800 text-warning hover:bg-warning-700 active:bg-warning-900 transition-colors font-medium text-base touch-manipulation rounded-5"
               >
                 Previous
               </button>
@@ -160,10 +169,10 @@ export default function AboutPastorPage() {
                   <button
                     key={i}
                     onClick={() => about.setIndex(i)}
-                    className={`w-12 h-12 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all touch-manipulation ${
+                    className={`w-12 h-12 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all touch-manipulation rounded-5 ${
                       about.index === i
-                        ? "bg-gray-900 text-white scale-110"
-                        : "bg-gray-300 hover:bg-gray-400 active:bg-gray-500"
+                        ? "bg-gray-900 text-warning scale-110"
+                        : "bg-warning-300 hover:bg-warning-400 active:bg-warning-500"
                     }`}
                   >
                     {i + 1}
@@ -175,7 +184,7 @@ export default function AboutPastorPage() {
                 onClick={() =>
                   about.setIndex((prev) => (prev + 1) % pastorSlides.length)
                 }
-                className="w-full sm:w-auto px-8 py-3 rounded-full bg-gray-800 text-white hover:bg-gray-700 active:bg-gray-900 transition-colors font-medium text-base touch-manipulation"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-gray-800 text-warning hover:bg-warning-700 active:bg-warning-900 transition-colors font-medium text-base touch-manipulation rounded-5"
               >
                 Next
               </button>
