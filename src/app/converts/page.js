@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { createConvert } from "@/lib/api";
 
 import Header from "@/components/Navigation";
 import BaseFooter from "@/components/BaseFooter";
@@ -12,9 +13,9 @@ export default function ConvertsPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     address: "",
     phone: "",
-    contact: "",
   });
 
   const handleInputChange = (e) => {
@@ -24,12 +25,41 @@ export default function ConvertsPage() {
     });
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send data to your backend, Google Sheet, Email, etc.
-    console.log("New Convert Submitted:", formData);
-    // For now, just go to step 3
-    setCurrentStep(3);
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        address: formData.address,
+        phonenumber: formData.phone,
+        status: "Not Contacted",
+        category: "New Convert",
+      };
+
+      const result = await createConvert(payload);
+      if (result.success || result.data) {
+        // Handle both response formats
+        console.log("New Convert Submitted:", result.data);
+        setCurrentStep(3);
+      } else {
+        const errorMsg =
+          result.error || "Something went wrong. Please try again.";
+        console.error("Submission failed:", errorMsg);
+        setErrorMessage(errorMsg);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setErrorMessage(error.message || "Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const goToStep2 = () => setCurrentStep(2);
@@ -41,7 +71,7 @@ export default function ConvertsPage() {
     formData.name || "a new believer"
   }. Please reach out to me.`;
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    whatsappMessage
+    whatsappMessage,
   )}`;
 
   return (
@@ -151,6 +181,20 @@ export default function ConvertsPage() {
 
               <div className="mb-4 position-relative">
                 <input
+                  type="email"
+                  name="email"
+                  className="form-control bg-dark text-white border-secondary"
+                  placeholder=" "
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+                <label className="form-label position-absolute">
+                  Email Address (Optional)
+                </label>
+              </div>
+
+              <div className="mb-4 position-relative">
+                <input
                   type="text"
                   name="address"
                   className="form-control bg-dark text-white border-secondary"
@@ -177,34 +221,31 @@ export default function ConvertsPage() {
                 </label>
               </div>
 
-              <div className="mb-4">
-                <label className="form-label fw-bold">
-                  Preferred Contact Method
-                </label>
-                <br />
-                {["Call", "WhatsApp", "SMS", "Email"].map((method) => (
-                  <div className="form-check form-check-inline" key={method}>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="contact"
-                      value={method}
-                      required
-                      onChange={handleInputChange}
-                    />
-                    <label className="form-check-label text-white">
-                      {method}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              {errorMessage && (
+                <div className="alert alert-danger mb-4" role="alert">
+                  {errorMessage}
+                </div>
+              )}
 
               <div className="text-center">
                 <button
                   type="submit"
-                  className="btn btn-warning btn-lg fw-bold px-5"
+                  disabled={isSubmitting}
+                  className="btn btn-warning btn-lg fw-bold px-5 d-inline-flex align-items-center justify-content-center"
+                  style={{ minWidth: "200px" }}
                 >
-                  Submit & Continue
+                  {isSubmitting ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Sending...
+                    </>
+                  ) : (
+                    "Submit & Continue"
+                  )}
                 </button>
               </div>
             </form>

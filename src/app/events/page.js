@@ -6,301 +6,7 @@ import Link from "next/link";
 import EventsFilter from "./EventsFilter";
 import EventsGallery from "./EventsGallery";
 import EventModal from "./EventModal";
-
-// Event data array
-const eventData = [
-  // Fellowship Sunday
-  {
-    id: 1,
-    title: "January Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "January 2025",
-    month: "January",
-    year: "2025",
-    description: "A wonderful fellowship to start the new year.",
-    images: ["/assets/images/ca1.png", "/assets/images/ca3.png"],
-  },
-  {
-    id: 2,
-    title: "February Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "February 2025",
-    month: "February",
-    year: "2025",
-    description: "Celebrating love and faith during our monthly fellowship.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  {
-    id: 3,
-    title: "March Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "March 2025",
-    month: "March",
-    year: "2025",
-    description: "Joining together for a time of worship and community.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  {
-    id: 4,
-    title: "April Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "April 2025",
-    month: "April",
-    year: "2025",
-    description: "A special Easter fellowship service.",
-    images: ["/assets/images/book.png"],
-  },
-  {
-    id: 5,
-    title: "May Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "May 2025",
-    month: "May",
-    year: "2025",
-    description: "Honoring mothers and family during our May fellowship.",
-    images: ["/assets/images/ca1.png"],
-  },
-  {
-    id: 6,
-    title: "June Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "June 2025",
-    month: "June",
-    year: "2025",
-    description: "Father's Day celebration at our monthly fellowship.",
-    images: ["/assets/images/ca3.png"],
-  },
-  {
-    id: 7,
-    title: "July Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "July 2025",
-    month: "July",
-    year: "2025",
-    description: "Summer worship and gathering.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  {
-    id: 8,
-    title: "August Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "August 2025",
-    month: "August",
-    year: "2025",
-    description: "A special worship session for the youth.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  {
-    id: 9,
-    title: "September Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "September 2025",
-    month: "September",
-    year: "2025",
-    description: "Back to school prayer and fellowship.",
-    images: ["/assets/images/book.png"],
-  },
-  {
-    id: 10,
-    title: "October Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "October 2025",
-    month: "October",
-    year: "2025",
-    description: "Celebrating grace and thanksgiving.",
-    images: ["/assets/images/ca1.png"],
-  },
-  {
-    id: 11,
-    title: "November Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "November 2025",
-    month: "November",
-    year: "2025",
-    description: "A time of deep prayer and reflection.",
-    images: ["/assets/images/ca3.png"],
-  },
-  {
-    id: 12,
-    title: "December Fellowship Sunday",
-    type: "Fellowship Sunday",
-    date: "December 2025",
-    month: "December",
-    year: "2025",
-    description: "A final fellowship of the year, filled with joy.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  // Christmas Carol Competition
-  {
-    id: 13,
-    title: "Christmas Carol Competition 2024",
-    type: "Christmas Carol Competition",
-    date: "December 2024",
-    month: "December",
-    year: "2024",
-    description: "Our annual competition of carols.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  // Halleluyah Party
-  {
-    id: 14,
-    title: "Halleluyah Party 2024",
-    type: "Halleluyah Party",
-    date: "December 2024",
-    month: "December",
-    year: "2024",
-    description: "An end-of-year celebration filled with praise.",
-    images: ["/assets/images/book.png"],
-  },
-  // Baby Dedication
-  {
-    id: 15,
-    title: "Baby Dedication - Smith Family",
-    type: "Baby Dedication",
-    date: "October 26, 2024",
-    month: "October",
-    year: "2024",
-    description: "The dedication of a child is a public commitment.",
-    images: ["/assets/images/ca1.png"],
-  },
-  {
-    id: 16,
-    title: "Baby Dedication - Johnson Family",
-    type: "Baby Dedication",
-    date: "November 15, 2024",
-    month: "November",
-    year: "2024",
-    description: "A special day for the Johnson family.",
-    images: ["/assets/images/ca3.png"],
-  },
-  // Weddings
-  {
-    id: 17,
-    title: "Wedding of John and Jane",
-    type: "Weddings",
-    date: "September 10, 2024",
-    month: "September",
-    year: "2024",
-    description: "Celebrating the union of John and Jane.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  {
-    id: 18,
-    title: "Wedding of Mark and Mary",
-    type: "Weddings",
-    date: "October 5, 2024",
-    month: "October",
-    year: "2024",
-    description: "A joyous celebration for Mark and Mary.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  // Queen Esther
-  {
-    id: 19,
-    title: "Queen Esther 2017",
-    type: "Queen Esther",
-    date: "2017",
-    month: "",
-    year: "2017",
-    description: "Celebrating our Queen Esther for the year 2017.",
-    images: ["/assets/images/book.png"],
-  },
-  {
-    id: 20,
-    title: "Queen Esther 2016",
-    type: "Queen Esther",
-    date: "2016",
-    month: "",
-    year: "2016",
-    description: "Celebrating our Queen Esther for the year 2016.",
-    images: ["/assets/images/ca1.png"],
-  },
-  // Grace
-  {
-    id: 21,
-    title: "Grace 2019",
-    type: "Grace",
-    date: "2019",
-    month: "",
-    year: "2019",
-    description: "A year of amazing grace.",
-    images: ["/assets/images/ca3.png"],
-  },
-  {
-    id: 22,
-    title: "Grace 2018",
-    type: "Grace",
-    date: "2018",
-    month: "",
-    year: "2018",
-    description: "Showcasing the grace of God in our lives.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  // Christmas Lights
-  {
-    id: 23,
-    title: "Christmas Lights 2024",
-    type: "Christmas Lights",
-    date: "December 2024",
-    month: "December",
-    year: "2024",
-    description: "Our church and community Christmas lights display.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  // Gallery: About Church
-  {
-    id: 24,
-    title: "Church Sanctuary",
-    type: "Gallery: About Church",
-    date: "2024",
-    month: "",
-    year: "2024",
-    description: "Views of our beautiful sanctuary.",
-    images: ["/assets/images/ca1.png", "/assets/images/ca3.png"],
-  },
-  // Gallery: About Pastor
-  {
-    id: 25,
-    title: "Rev. Chris Okotie",
-    type: "Gallery: About Pastor",
-    date: "2024",
-    month: "",
-    year: "2024",
-    description: "Moments with our Pastor.",
-    images: ["/assets/images/pastor.jpg"],
-  },
-  // Gallery: Departments
-  {
-    id: 26,
-    title: "Children's Department",
-    type: "Gallery: Children's Department",
-    date: "2024",
-    month: "",
-    year: "2024",
-    description: "Activities in the Children's Department.",
-    images: ["/assets/images/ca3.png"],
-  },
-  {
-    id: 27,
-    title: "Benevolence Ministry",
-    type: "Gallery: Benevolence",
-    date: "2024",
-    month: "",
-    year: "2024",
-    description: "Reaching out to the community.",
-    images: ["/assets/images/Rectangle 4.png"],
-  },
-  {
-    id: 28,
-    title: "Choir Ministration",
-    type: "Gallery: Music",
-    date: "2024",
-    month: "",
-    year: "2024",
-    description: "The choir leading worship.",
-    images: ["/assets/images/book.png"],
-  },
-];
+import { getEvents } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -311,50 +17,77 @@ const PaginationComponent = ({ totalItems, currentPage, onChangePage }) => {
 
   return (
     <div className="pagination mt-5 justify-content-center">
-      <Link
-        href="#"
-        className={currentPage === 1 ? "disabled" : ""}
-        onClick={(e) => {
-          e.preventDefault();
-          if (currentPage !== 1) onChangePage(currentPage - 1);
-        }}
-      >
-        <i className="fas fa-chevron-left"></i>
-      </Link>
-      {pages.map((p) => (
+      <div className="flex gap-2">
         <Link
           href="#"
-          key={p}
-          className={p === currentPage ? "active" : ""}
+          className={`px-4 py-2 rounded-md transition-colors ${currentPage === 1 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-white text-gray-700 hover:bg-gray-100"}`}
           onClick={(e) => {
             e.preventDefault();
-            onChangePage(p);
+            if (currentPage !== 1) onChangePage(currentPage - 1);
           }}
         >
-          {p}
+          <i className="fas fa-chevron-left"></i>
         </Link>
-      ))}
-      <Link
-        href="#"
-        className={currentPage === totalPages ? "disabled" : ""}
-        onClick={(e) => {
-          e.preventDefault();
-          if (currentPage !== totalPages) onChangePage(currentPage + 1);
-        }}
-      >
-        <i className="fas fa-chevron-right"></i>
-      </Link>
+        {pages.map((p) => (
+          <Link
+            href="#"
+            key={p}
+            className={`px-4 py-2 rounded-md transition-colors ${p === currentPage ? "bg-yellow-500 text-black font-semibold" : "bg-white text-gray-700 hover:bg-gray-100"}`}
+            onClick={(e) => {
+              e.preventDefault();
+              onChangePage(p);
+            }}
+          >
+            {p}
+          </Link>
+        ))}
+        <Link
+          href="#"
+          className={`px-4 py-2 rounded-md transition-colors ${currentPage === totalPages ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-white text-gray-700 hover:bg-gray-100"}`}
+          onClick={(e) => {
+            e.preventDefault();
+            if (currentPage !== totalPages) onChangePage(currentPage + 1);
+          }}
+        >
+          <i className="fas fa-chevron-right"></i>
+        </Link>
+      </div>
     </div>
   );
 };
 
 export default function EventsPage() {
-  const [filteredEvents, setFilteredEvents] = useState(eventData);
+  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Extract unique months and years for filters
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const response = await getEvents();
+        console.log("Events API Response:", response);
+        // Ensure we are working with an array
+        const eventsData = response.data || [];
+        setEvents(eventsData);
+        setFilteredEvents(eventsData);
+      } catch (err) {
+        console.error("Failed to load events:", err);
+        setError("Failed to load events. Please try again later.");
+        // Fallback to empty or keep local mock logic if critical (removed hardcoded data for true integration)
+        setEvents([]);
+        setFilteredEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadEvents();
+  }, []);
+
+  // Extract unique months and years for filters based on fetched data
   const months = [
     "January",
     "February",
@@ -372,40 +105,23 @@ export default function EventsPage() {
 
   const uniqueMonths = [
     ...new Set(
-      eventData
+      events
         .filter((event) => event.month)
         .map((event) => event.month)
-        .sort((a, b) => months.indexOf(a) - months.indexOf(b))
+        .sort((a, b) => months.indexOf(a) - months.indexOf(b)),
     ),
   ];
 
   const uniqueYears = [
     ...new Set(
-      eventData
+      events
         .filter((event) => event.year)
         .map((event) => event.year)
-        .sort((a, b) => b - a)
+        .sort((a, b) => b - a),
     ),
   ];
 
-  const departments = [
-    "Children's Department",
-    "Benevolence",
-    "Ushering",
-    "Security",
-    "Sanitation",
-    "Technical",
-    "Music",
-    "Publishing",
-    "Medical",
-  ];
-
-  const galleryTypes = [
-    "Gallery: About Church",
-    "Gallery: About Pastor",
-    ...departments.map((dept) => `Gallery: ${dept}`),
-  ];
-
+  // Dynamically generate event types from data if possible, or keep hardcoded list as filter options
   const eventTypes = [
     "Fellowship Sunday",
     "Christmas Carol Competition",
@@ -415,18 +131,20 @@ export default function EventsPage() {
     "Queen Esther",
     "Grace",
     "Christmas Lights",
-    ...galleryTypes,
+    // Could add more dynamically
   ];
 
   const handleFilter = (filters) => {
     const { search, eventType, month, year } = filters;
 
-    const filtered = eventData.filter((item) => {
+    const filtered = events.filter((item) => {
       // Search query match
       const searchMatch =
         !search ||
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase()) ||
+        (item.title &&
+          item.title.toLowerCase().includes(search.toLowerCase())) ||
+        (item.description &&
+          item.description.toLowerCase().includes(search.toLowerCase())) ||
         (item.date && item.date.toLowerCase().includes(search.toLowerCase()));
 
       // Event type match
@@ -460,6 +178,26 @@ export default function EventsPage() {
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentEvents = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
 
+  if (loading) {
+    return (
+      <div className="container py-5 my-5 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+        <p className="mt-2 text-gray-500">Loading events...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-5 my-5 text-center">
+        <div className="text-red-500 mb-2">
+          <i className="fas fa-exclamation-circle text-2xl"></i>
+        </div>
+        <p className="text-gray-700">{error}</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="container py-5 my-5">
@@ -478,7 +216,18 @@ export default function EventsPage() {
           onFilter={handleFilter}
         />
 
-        <EventsGallery events={currentEvents} onEventClick={handleEventClick} />
+        {currentEvents.length > 0 ? (
+          <EventsGallery
+            events={currentEvents}
+            onEventClick={handleEventClick}
+          />
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-gray-500">
+              No events found matching your criteria.
+            </p>
+          </div>
+        )}
 
         <PaginationComponent
           totalItems={filteredEvents.length}

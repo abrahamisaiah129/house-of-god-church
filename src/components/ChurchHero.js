@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const defaultSlides = [
   {
@@ -31,10 +32,31 @@ export default function ChurchHero({
   slides = defaultSlides,
   title,
   welcomeText,
+  onWatchLive,
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const pathname = usePathname();
 
-  const processedSlides = slides.map((slide) => ({
+  const [slidesData, setSlidesData] = useState(defaultSlides);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/hero`,
+        );
+        const result = await res.json();
+        if (result.success && result.data && result.data.length > 0) {
+          setSlidesData(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch hero slides:", error);
+      }
+    };
+    fetchSlides();
+  }, []);
+
+  const processedSlides = slidesData.map((slide) => ({
     ...slide,
     title: title || slide.title,
     welcomeText: welcomeText || slide.welcomeText,
@@ -71,9 +93,13 @@ export default function ChurchHero({
                   <i className="fa-regular fa-calendar-days"></i>{" "}
                   {slide.serviceTime}
                 </p>
-                <a href="#" className="watch-btn">
-                  <i className="fa-solid fa-video"></i> Watch Live
-                </a>
+                <button
+                  className={`watch-btn ${pathname === "/" ? "" : "d-none"}`}
+                  onClick={onWatchLive}
+                  type="button"
+                >
+                  <i className="fa-solid fa-video"></i> Watch Apokalupsis Live
+                </button>
               </div>
             </div>
           ))}
@@ -86,7 +112,7 @@ export default function ChurchHero({
           onClick={() =>
             setActiveIndex(
               (prev) =>
-                (prev - 1 + processedSlides.length) % processedSlides.length
+                (prev - 1 + processedSlides.length) % processedSlides.length,
             )
           }
         >

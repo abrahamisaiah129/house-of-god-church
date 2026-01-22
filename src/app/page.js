@@ -10,16 +10,19 @@ import BookSection from "@/components/BookSection";
 import ContactSection from "@/components/ContactSection";
 import AnnouncementsCarousel from "@/components/AnnouncementsCarousel";
 
-// This file must be in src/components/WelcomeVideoPopup.js
-import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
 import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
-  const [watchLiveTrigger, setWatchLiveTrigger] = useState(null);
+  const triggerWatchLive = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("open-welcome-video"));
+      document.getElementById("global-open-video-trigger")?.click();
+    }
+  };
 
   return (
     <ChurchLayout>
-      <ChurchHero onWatchLive={() => setWatchLiveTrigger(Date.now())} />
+      <ChurchHero onWatchLive={triggerWatchLive} />
       <AboutChurch />
       <WatchSermons />
       {/* Announcements carousel — placed near Programmes */}
@@ -29,8 +32,6 @@ export default function Home() {
       <BookSection />
       <ContactSection />
 
-      {/* This popup appears ONLY on Sundays, once per day */}
-      <WelcomeVideoPopup openTrigger={watchLiveTrigger} />
       <ScrollToTop />
     </ChurchLayout>
   );

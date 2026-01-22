@@ -1,8 +1,10 @@
 // app/layout.js (Next.js App Router)
 
+import { Suspense } from "react";
 import { Poppins } from "next/font/google";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css"; // Your custom global CSS with Tailwind directives
+import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
 
 // Poppins Font
 const poppins = Poppins({
@@ -112,9 +114,12 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
-        className={`${poppins.className} font-sans antialiased bg-(--background) text-round)`}
+        className={`${poppins.className} font-sans antialiased bg-(--background) text-gray-900`}
       >
         {children}
+        <Suspense fallback={null}>
+          <WelcomeVideoPopup />
+        </Suspense>
 
         {/* Bootstrap Bundle JS (with Popper) - placed at end for performance */}
         <script

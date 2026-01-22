@@ -16,44 +16,41 @@ export default function Programmes() {
 
   const nextSunday = getNextSunday();
 
-  // Programmes: keep cards unchanged visually. Mark Sunday recurring items with `everySunday`.
-  // Add a `priority` field; lower number = higher priority.
-  const programmes = [
-    {
-      date: "01",
-      month: "February",
-      title: "Household is 32!",
-      color: "#f15c5c",
-      priority: 3,
-    },
-    {
-      date: "12",
-      month: "September",
-      title: "Wednesday Service",
-      color: "#1a0033",
-      priority: 2,
-    },
-    {
-      date: "01",
-      month: "October",
-      title: "Nigeria's Independence",
-      color: "#ffaa00",
-      priority: 4,
-    },
-    {
-      date: nextSunday.date,
-      month: nextSunday.month,
-      title: "Sunday Service",
-      color: "#4d1c1c",
-      everySunday: true,
-      priority: 1,
-    },
-  ];
+  const [programmesData, setProgrammesData] = useState([]);
 
-  // Sort programmes by ascending priority (1 = highest)
-  // Compute on each render (array is small) to avoid fragile memoization warnings
-  const sortedProgrammes = [...programmes].sort(
-    (a, b) => (a.priority || 999) - (b.priority || 999)
+  useEffect(() => {
+    const fetchProgrammes = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/programmes`,
+        );
+        const result = await res.json();
+        if (result.success && result.data) {
+          // Process programmes: if everySunday is true, update date/month
+          const processed = result.data.map((p) => {
+            if (p.everySunday) {
+              return {
+                ...p,
+                date: nextSunday.date,
+                month: nextSunday.month,
+              };
+            }
+            return p;
+          });
+          setProgrammesData(processed);
+        }
+      } catch (error) {
+        console.error("Failed to fetch programmes:", error);
+      }
+    };
+    fetchProgrammes();
+  }, [nextSunday.date, nextSunday.month]);
+
+  // If data not yet loaded, use fallback or empty? Better to wait.
+  // Using empty array initially, but sort will work on empty array.
+
+  const sortedProgrammes = [...programmesData].sort(
+    (a, b) => (a.priority || 999) - (b.priority || 999),
   );
 
   // Static site-wide service times / info (shown in See More popup)

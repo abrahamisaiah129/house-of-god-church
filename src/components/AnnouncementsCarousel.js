@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-/**
- * AnnouncementsCarousel
- * Props:
- * - items: ({ image: string, title: string, text: string, link?: string } | string)[]
- * - interval: number (ms between slides)
- * - className: string (tailwind classes to apply to wrapper)
- */
+import { getAnnouncements } from "@/lib/api";
 
 const DEFAULT_ITEMS = [
   {
@@ -37,20 +31,48 @@ const DEFAULT_ITEMS = [
 ];
 
 export default function AnnouncementsCarousel({
-  items = DEFAULT_ITEMS,
-  interval = 5000,
   className = "my-16",
+  interval = 5000,
 }) {
+  const [items, setItems] = useState([]);
   const [index, setIndex] = useState(0);
   const [lightboxItem, setLightboxItem] = useState(null);
   const pausedRef = useRef(false);
 
   useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await getAnnouncements();
+        if (response.data && response.data.length > 0) {
+          // Adapt backend structure to component structure if needed
+          const formattedItems = response.data.map((item) => ({
+            title: item.title,
+            text: item.content || item.description,
+            image: item.image || "/assets/images/ca1.png", // Fallback image if none from API
+            link: item.link || "/events",
+          }));
+          setItems(formattedItems);
+        } else {
+          setItems(DEFAULT_ITEMS); // Fallback to defaults if no API data
+        }
+      } catch (error) {
+        console.error("Failed to fetch announcements:", error);
+        setItems(DEFAULT_ITEMS); // Fallback on error
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
+  useEffect(() => {
     if (!items || items.length < 2) return;
-    const id = setInterval(() => {
-      if (!pausedRef.current && !lightboxItem)
-        setIndex((i) => (i + 1) % items.length);
-    }, Math.max(800, interval));
+    const id = setInterval(
+      () => {
+        if (!pausedRef.current && !lightboxItem)
+          setIndex((i) => (i + 1) % items.length);
+      },
+      Math.max(800, interval),
+    );
     return () => clearInterval(id);
   }, [items, interval, lightboxItem]);
 
@@ -74,11 +96,8 @@ export default function AnnouncementsCarousel({
     >
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-10">
-          {/* <span className="text-yellow-500 text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
-            Stay Connected
-          </span> */}
           <h2 className="text-3xl md:text-4xl font-bold text-white mt-2">
-          ANNOUNCEMENTS
+            ANNOUNCEMENTS
           </h2>
           <div className="w-24 h-1 bg-yellow-500 mx-auto mt-4 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
         </div>
@@ -217,9 +236,10 @@ export default function AnnouncementsCarousel({
 
       {/* Screen-reader live region */}
       <div className="sr-only" aria-live="polite">
-        {typeof items[index] === "string"
-          ? items[index]
-          : `${items[index]?.title} - ${items[index]?.text}`}
+        {items[index] &&
+          (typeof items[index] === "string"
+            ? items[index]
+            : `${items[index]?.title} - ${items[index]?.text}`)}
       </div>
     </div>
   );

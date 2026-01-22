@@ -32,7 +32,7 @@ export default function AboutChurchPage() {
             <p className="text-gray-600 mb-6 font-medium">
               Household of God Church, Lagos, Nigeria
             </p> */}
-          <div className="w-full relative rounded-xl overflow-hidden shadow-lg leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
+          <div className="w-full relative rounded-xl overflow-hidden shadow-lg leading-relaxed transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1  ">
             <Image
               src="/assets/images/Rectangle 4.png" // Using your first image as the primary visual
               alt="Church History"

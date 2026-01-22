@@ -8,7 +8,6 @@ import Image from "next/image";
 import FilterDropdown from "./components/FilterDropdown";
 import GalleryGrid from "./components/GalleryGrid"; // Matches GalleryGrid.js
 import LightboxModal from "./components/Lightboxmodal"; // Matches LightboxModal.js
-import WelcomeVideoPopup from "@/components/WelcomeVideoPopup";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // ====================== EVENT DATA ======================
@@ -444,6 +443,8 @@ const Pagination = ({ current, total, onChange }) => {
   );
 };
 
+const imagesPerPage = 8;
+
 export default function EventPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -462,14 +463,34 @@ export default function EventPage() {
   const [sermonView, setSermonView] = useState("hidden"); // 'hidden', 'modal', 'minimized'
   const hasAutoShown = useRef(false);
 
+  const currentEntry = useMemo(() => {
+    if (!config) return null;
+    // Sort entries by year descending to show the latest by default
+    const sortedEntries = [...config.entries].sort((a, b) => b.year - a.year);
+    return (
+      sortedEntries.find((e) => {
+        const monthMatch =
+          !selectedMonth ||
+          e.month?.toLowerCase() === selectedMonth.toLowerCase();
+        const yearMatch = !selectedYear || e.year === Number(selectedYear);
+        return monthMatch && yearMatch;
+      }) || sortedEntries[0]
+    );
+  }, [config, selectedMonth, selectedYear]);
+
+  const gallery = currentEntry?.gallery || [];
+  const totalPages = Math.ceil(gallery.length / imagesPerPage);
+  const paginated = gallery.slice(
+    (currentPage - 1) * imagesPerPage,
+    currentPage * imagesPerPage
+  );
+
   useEffect(() => {
     if (currentEntry?.sermon && !hasAutoShown.current) {
       setSermonView("modal");
       hasAutoShown.current = true;
     }
   }, [currentEntry]);
-
-  const imagesPerPage = 8;
 
   const resetPageAndSet = (setter, value) => {
     setCurrentPage(1);
@@ -501,28 +522,6 @@ export default function EventPage() {
       (a, b) => b - a
     );
   }, [config]);
-
-  const currentEntry = useMemo(() => {
-    if (!config) return null;
-    // Sort entries by year descending to show the latest by default
-    const sortedEntries = [...config.entries].sort((a, b) => b.year - a.year);
-    return (
-      sortedEntries.find((e) => {
-        const monthMatch =
-          !selectedMonth ||
-          e.month?.toLowerCase() === selectedMonth.toLowerCase();
-        const yearMatch = !selectedYear || e.year === Number(selectedYear);
-        return monthMatch && yearMatch;
-      }) || sortedEntries[0]
-    );
-  }, [config, selectedMonth, selectedYear]);
-
-  const gallery = currentEntry?.gallery || [];
-  const totalPages = Math.ceil(gallery.length / imagesPerPage);
-  const paginated = gallery.slice(
-    (currentPage - 1) * imagesPerPage,
-    currentPage * imagesPerPage
-  );
 
   if (!config) {
     return (
@@ -696,13 +695,6 @@ export default function EventPage() {
           )}
         </>
       )}
-
-      {/* Global Video Popup (Floating Button for Navigation) */}
-      <WelcomeVideoPopup
-        initialOpen={true}
-        initialMinimized={true}
-        autoOpen={false}
-      />
 
       {/* Scroll To Top Button */}
       <ScrollToTop />

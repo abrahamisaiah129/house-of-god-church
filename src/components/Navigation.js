@@ -178,11 +178,7 @@ export default function Header() {
           <ul className="navbar-nav ms-auto">
             {/* 1. Home */}
             <li className="nav-item">
-              <Link
-                className={`nav-link ${isActive("/") ? "active" : ""}`}
-                href="/"
-                onClick={handleLinkClick}
-              >
+              <Link className="nav-link" href="/" onClick={handleLinkClick}>
                 Home
               </Link>
             </li>
@@ -445,7 +441,7 @@ export default function Header() {
             {/* 5. New Converts */}
             <li className="nav-item">
               <Link
-                className={`nav-link ${isActive("/converts") ? "active" : ""}`}
+                className="nav-link"
                 href="/converts"
                 onClick={handleLinkClick}
               >
@@ -456,7 +452,7 @@ export default function Header() {
             {/* 6. Media */}
             <li className="nav-item">
               <Link
-                className={`nav-link ${isActive("/media") ? "active" : ""}`}
+                className="nav-link"
                 href="/media"
                 onClick={handleLinkClick}
               >
